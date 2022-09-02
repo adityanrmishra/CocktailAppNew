@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="viewModel"
+            type="com.app.cocktailapp.ui.splash.SplashViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/splash">
+
+        <TextView
+            android:id="@+id/appText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="-100dp"
+            android:text="@string/splash_screen_quotes"
+            android:textAppearance="?attr/textAppearanceHeadlineLarge"
+            android:textColor="@android:color/holo_green_dark"
+            app:layout_constraintBottom_toTopOf="@id/included"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <include android:id="@+id/included" layout="@layout/loading_progress" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</layout>

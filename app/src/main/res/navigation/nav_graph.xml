@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/SplashFragment">
+
+    <fragment
+        android:id="@+id/SplashFragment"
+        android:name="com.app.cocktailapp.ui.splash.SplashFragment"
+        android:label="@string/app_name"
+        tools:layout="@layout/fragment_splash">
+        <action
+            android:id="@+id/action_SplashFragment_to_DrinksFragment"
+            app:destination="@id/DrinksFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/DrinksFragment"
+        android:name="com.app.cocktailapp.ui.home.DrinksFragment"
+        android:label="@string/app_name"
+        tools:layout="@layout/fragment_drinks">
+        <action
+            android:id="@+id/action_DrinksFragment_to_DrinkInfoFragment"
+            app:destination="@id/DrinkInfoFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/DrinkInfoFragment"
+        android:name="com.app.cocktailapp.ui.detail.DrinkInfoFragment"
+        android:label="@string/app_name"
+        tools:layout="@layout/fragment_drink_info">
+    </fragment>
+
+</navigation>
