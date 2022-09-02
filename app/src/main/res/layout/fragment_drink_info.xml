@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <import type="android.view.View" />
+
         <import type="android.text.TextUtils" />
 
         <variable
@@ -21,12 +23,12 @@
             android:id="@+id/btn_back"
             android:layout_width="wrap_content"
             android:layout_height="?actionBarSize"
+            android:layout_marginTop="@dimen/dimen_20dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:clickable="true"
             android:contentDescription="@string/go_back"
             android:focusable="true"
             android:padding="@dimen/dimen_8dp"
-            android:layout_marginTop="@dimen/dimen_20dp"
             android:src="@drawable/ic_arrow_left"
             app:layout_constraintBottom_toTopOf="@id/view_contents"
             app:layout_constraintEnd_toStartOf="@id/tv_header_title"
@@ -64,6 +66,15 @@
             app:layout_constraintTop_toTopOf="@id/btn_back"
             tools:text="@string/app_name" />
 
+        <View
+            android:id="@+id/header_border"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/holo_green_dark"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btn_back" />
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/view_contents"
             android:layout_width="match_parent"
@@ -72,7 +83,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btn_back">
+            app:layout_constraintTop_toBottomOf="@id/header_border">
 
             <ImageView
                 android:id="@+id/profPic"
@@ -110,8 +121,7 @@
                 android:background="@color/planeSecondaryTextColor"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_alias"
-                />
+                app:layout_constraintTop_toBottomOf="@id/tv_alias" />
 
             <TextView
                 android:id="@+id/tv_id_label"
@@ -148,11 +158,11 @@
                 android:text="@string/drink_tag"
                 android:textAppearance="?attr/textAppearanceSubtitle2"
                 android:textColor="@color/planeSecondaryTextColor"
+                android:visibility="@{TextUtils.isEmpty(item.strTags) ? View.GONE : View.VISIBLE}"
                 app:layout_constraintEnd_toStartOf="@id/tv_tag"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_id"
                 app:layout_constraintWidth_percent="0.5"
-                android:visibility="@{TextUtils.isEmpty(item.strTags) ? View.GONE : View.VISIBLE}"
                 tools:text="@string/drink_tag" />
 
             <TextView
@@ -162,12 +172,12 @@
                 android:text="@{item.strTags}"
                 android:textAppearance="?attr/textAppearanceSubtitle2"
                 android:textColor="@color/planePrimaryTextColor"
+                android:visibility="@{TextUtils.isEmpty(item.strTags) ? View.GONE : View.VISIBLE}"
                 app:layout_constraintBottom_toBottomOf="@id/tv_tag_label"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/tv_tag_label"
                 app:layout_constraintTop_toTopOf="@id/tv_tag_label"
                 app:layout_constraintWidth_percent="0.5"
-                android:visibility="@{TextUtils.isEmpty(item.strTags) ? View.GONE : View.VISIBLE}"
                 tools:text="@string/drink_tag" />
 
             <TextView
@@ -205,12 +215,12 @@
                 android:text="@string/drink_iba"
                 android:textAppearance="?attr/textAppearanceSubtitle2"
                 android:textColor="@color/planeSecondaryTextColor"
+                android:visibility="@{TextUtils.isEmpty(item.strIBA) ? View.GONE : View.VISIBLE}"
                 app:layout_constraintBottom_toTopOf="@id/tv_alcoholic_label"
                 app:layout_constraintEnd_toStartOf="@id/tv_iba"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_category"
                 app:layout_constraintWidth_percent="0.5"
-                android:visibility="@{TextUtils.isEmpty(item.strIBA) ? View.GONE : View.VISIBLE}"
                 tools:text="@string/drink_iba" />
 
             <TextView
@@ -220,12 +230,12 @@
                 android:text="@{item.strIBA}"
                 android:textAppearance="?attr/textAppearanceSubtitle2"
                 android:textColor="@color/planePrimaryTextColor"
+                android:visibility="@{TextUtils.isEmpty(item.strIBA) ? View.GONE : View.VISIBLE}"
                 app:layout_constraintBottom_toBottomOf="@id/tv_iba_label"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/tv_iba_label"
                 app:layout_constraintTop_toTopOf="@id/tv_iba_label"
                 app:layout_constraintWidth_percent="0.5"
-                android:visibility="@{TextUtils.isEmpty(item.strIBA) ? View.GONE : View.VISIBLE}"
                 tools:text="@string/drink_iba" />
 
             <TextView
@@ -301,6 +311,7 @@
                 android:id="@+id/tv_updated_date"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
+                android:autoSizeTextType="uniform"
                 android:text="@{item.dateModified}"
                 android:textAppearance="?attr/textAppearanceSubtitle2"
                 android:textColor="@color/planePrimaryTextColor"
@@ -309,7 +320,6 @@
                 app:layout_constraintStart_toEndOf="@id/tv_updated_date_label"
                 app:layout_constraintTop_toTopOf="@id/tv_updated_date_label"
                 app:layout_constraintWidth_percent="0.5"
-                android:autoSizeTextType="uniform"
                 tools:text="@string/drink_data" />
 
 
@@ -385,6 +395,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="180dp"
+                android:autoSizeTextType="uniform"
                 android:text="@{item.strInstructions}"
                 android:textAppearance="?attr/textAppearanceSubtitle2"
                 android:textColor="@color/planePrimaryTextColor"
@@ -393,7 +404,6 @@
                 app:layout_constraintStart_toEndOf="@id/tv_instructions_label"
                 app:layout_constraintTop_toTopOf="@id/tv_instructions_label"
                 app:layout_constraintWidth_percent="0.5"
-                android:autoSizeTextType="uniform"
                 tools:text="@string/drink_instructions" />
 
             <include
