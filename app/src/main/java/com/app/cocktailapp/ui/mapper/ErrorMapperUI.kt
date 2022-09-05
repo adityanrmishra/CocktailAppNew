@@ -9,7 +9,7 @@ import com.app.cocktailapp.ui.model.Error
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
-class ErrorViewMapperUI @Inject constructor(@ApplicationContext private val context: Context) :
+class ErrorMapperUI @Inject constructor(@ApplicationContext private val context: Context) :
     Mapper<Error, ErrorEntity?> {
 
     override fun mapToOut(input: ErrorEntity?): Error {

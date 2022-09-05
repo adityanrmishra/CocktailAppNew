@@ -111,6 +111,7 @@ dependencies {
 
     // optional - Test helpers for LiveData
     testImplementation testing.unitTestingCore
+    testImplementation "io.mockk:mockk:1.9.3"
 
     testImplementation testing.unitTestingJunit
     androidTestImplementation 'androidx.test.ext:junit:1.1.4-alpha07'

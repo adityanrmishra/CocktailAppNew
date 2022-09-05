@@ -85,8 +85,8 @@ class DrinkInfoFragment : BaseFragment() {
     private fun onErrorState(result: State<List<Drink>>) {
         result.error?.let {
             updateProgress(false)
-            Toast.makeText(requireContext(), result.error.message, Toast.LENGTH_SHORT)
-                .show()
+            showMessage(result.error.message)
+            //Toast.makeText(requireContext(), result.error.message, Toast.LENGTH_SHORT).show()
         }
     }
 
