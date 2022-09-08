@@ -9,6 +9,5 @@ import android.os.Parcelable
 @Keep
 @Parcelize
 data class Drinks(
-    @SerializedName("drinks")
-    val drinkResponseModels: List<DrinkResponseModel>
+    @SerializedName("drinks") val drinkResponseModels: ArrayList<DrinkResponseModel> = arrayListOf()
 ) : Parcelable

@@ -5,7 +5,7 @@ import com.app.cocktailapp.core.Resource
 import com.app.cocktailapp.domain.usecase.DrinkUseCase
 import com.app.cocktailapp.ui.base.BaseViewModel
 import com.app.cocktailapp.ui.mapper.DrinkMapperUI
-import com.app.cocktailapp.ui.mapper.ErrorViewMapperUI
+import com.app.cocktailapp.ui.mapper.ErrorMapperUI
 import com.app.cocktailapp.ui.model.Drink
 import com.app.cocktailapp.ui.model.State
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -17,7 +17,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DrinkInfoViewModel @Inject constructor(
-    private val errorViewMapper: ErrorViewMapperUI,
+    private val errorViewMapper: ErrorMapperUI,
     private val drinkUseCase: DrinkUseCase,
     private val drinkMapperUI: DrinkMapperUI
 ) : BaseViewModel() {
@@ -28,7 +28,7 @@ class DrinkInfoViewModel @Inject constructor(
     private lateinit var _drink: List<Drink>
 
 
-    fun fetchDrinks(id: String) {
+    fun fetchDrink(id: String) {
         drinkUseCase(id).onEach {
             when (it) {
                 is Resource.Loading -> {

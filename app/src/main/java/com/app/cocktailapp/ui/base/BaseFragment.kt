@@ -16,9 +16,6 @@ abstract class BaseFragment : Fragment() {
         subscribeUi()
     }
 
-    /**
-     * Set a status bar color to this fragment.
-     */
     protected open fun setStatusBarColor() {
         activity?.let {
             it.window.statusBarColor = it.getColor(
@@ -27,9 +24,6 @@ abstract class BaseFragment : Fragment() {
         }
     }
 
-    /**
-     * Initialize/Subscribe UI properties after Fragment's View created.
-     */
     abstract fun subscribeUi()
 
     protected fun showError(msg: String, onRetry: () -> Unit) {
@@ -43,9 +37,6 @@ abstract class BaseFragment : Fragment() {
         }
     }
 
-    /**
-     * Method to display a message to the user via SnackBar.
-     */
     protected fun showMessage(msg: String) {
         view?.let {
             hideError()
@@ -54,10 +45,7 @@ abstract class BaseFragment : Fragment() {
         }
     }
 
-    /**
-     * Method to dismiss the displayed message.
-     */
-    protected fun hideError() {
+    private fun hideError() {
         snackBar?.dismiss()
     }
 

@@ -66,7 +66,6 @@ dependencies {
 
     //DI Hilt
     implementation hilt.hiltAndroid
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     kapt hilt.kaptHiltAndroidCompiler
     implementation hilt.hiltViewModel
     kapt hilt.kaptHiltCompiler
@@ -110,8 +109,18 @@ dependencies {
 
     // optional - Test helpers for LiveData
     testImplementation testing.unitTestingCore
-
+    testImplementation testing.unitTestingMockk
     testImplementation testing.unitTestingJunit
-    androidTestImplementation  testing.uiTestingJunit
-    androidTestImplementation  testing.uiTestingEspresso
+
+    // espresso & UI Testing
+    androidTestImplementation testing.uiTestExpressoIdCont
+    androidTestImplementation testing.uiTestingJunit
+    androidTestImplementation testing.uiTestingEspresso
+    androidTestImplementation testing.uiTestRunner
+    androidTestImplementation testing.uiTestRules
+    implementation testing.uiTestExpressoIdling
+
+    androidTestImplementation "androidx.navigation:navigation-testing:2.5.1"
+    androidTestImplementation "androidx.fragment:fragment-testing:1.5.2"
+
 }

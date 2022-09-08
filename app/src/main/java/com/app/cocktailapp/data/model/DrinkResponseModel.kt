@@ -60,5 +60,4 @@ data class DrinkResponseModel(
     @SerializedName("strImageAttribution") var strImageAttribution: String? = null,
     @SerializedName("strCreativeCommonsConfirmed") var strCreativeCommonsConfirmed: String? = null,
     @SerializedName("dateModified") var dateModified: String? = null
-
 ) : Parcelable

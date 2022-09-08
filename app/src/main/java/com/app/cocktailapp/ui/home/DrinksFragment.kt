@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -14,6 +13,7 @@ import androidx.navigation.fragment.findNavController
 import com.app.cocktailapp.R
 import com.app.cocktailapp.databinding.CategoryChipBinding
 import com.app.cocktailapp.databinding.FragmentDrinksBinding
+import com.app.cocktailapp.ui.expresso.EspressoIdlingResource
 import com.app.cocktailapp.ui.adapter.DrinksAdapter
 import com.app.cocktailapp.ui.base.BaseFragment
 import com.app.cocktailapp.ui.detail.DrinkInfoFragment
@@ -53,10 +53,12 @@ class DrinksFragment : BaseFragment() {
     override fun subscribeUi() {
         setupChip()
         adapterInit()
-        observeResultState()
+        observeDrinksData()
     }
 
     private fun setupChip() {
+        EspressoIdlingResource.increment()
+
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 drinksViewModel.getFilterState.collectLatest { uiState ->
@@ -75,6 +77,7 @@ class DrinksFragment : BaseFragment() {
             val chip = createChip(category.strCategory.toString())
             if (chip.text.toString() == drinksViewModel.defaultCategory) {
                 chip.isChecked = true
+                drinksViewModel.setDrinkCategory(chip.text.toString())
             }
             binding.drinkCategory.addView(chip)
         }
@@ -83,9 +86,13 @@ class DrinksFragment : BaseFragment() {
             val chip: Chip? = group.findViewById(checkedId)
             chip?.let {
                 drinksViewModel.setDrinkCategory(chip.text.toString())
-                drinksViewModel.fetchDrinks()
+                drinksViewModel.fetchDrinks(drinksViewModel.defaultCategory)
             } ?: kotlin.run {
             }
+        }
+
+        if (!EspressoIdlingResource.getIdlingResource().isIdleNow) {
+            EspressoIdlingResource.decrement()
         }
     }
 
@@ -102,7 +109,8 @@ class DrinksFragment : BaseFragment() {
         }
     }
 
-    private fun observeResultState() {
+    private fun observeDrinksData() {
+        EspressoIdlingResource.increment()
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 drinksViewModel.getDrinksState.collectLatest { uiState ->
@@ -117,7 +125,7 @@ class DrinksFragment : BaseFragment() {
 
     private fun onInitialState(result: State<List<Drink>>) {
         if (result.isInitialState) {
-            drinksViewModel.fetchDrinks()
+            drinksViewModel.fetchDrinks(drinksViewModel.defaultCategory)
         }
     }
 
@@ -128,6 +136,10 @@ class DrinksFragment : BaseFragment() {
             } else {
                 binding.noResultFound.visibility = View.GONE
                 drinksAdapter.update(result.toMutableList())
+
+                if (!EspressoIdlingResource.getIdlingResource().isIdleNow) {
+                    EspressoIdlingResource.decrement()
+                }
             }
             binding.included.loading.visibility = View.GONE
         }
@@ -138,7 +150,8 @@ class DrinksFragment : BaseFragment() {
         state.error?.let {
             binding.noResultFound.visibility = View.GONE
             binding.included.loading.visibility = View.GONE
-            Toast.makeText(requireContext(), state.error.message, Toast.LENGTH_SHORT).show()
+            showMessage(state.error.message)
+            //Toast.makeText(requireContext(), state.error.message, Toast.LENGTH_SHORT).show()
         }
     }
 

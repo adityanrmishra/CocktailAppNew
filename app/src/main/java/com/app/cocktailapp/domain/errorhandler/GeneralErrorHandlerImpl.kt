@@ -13,17 +13,9 @@ class GeneralErrorHandlerImpl @Inject constructor() : ErrorHandler {
             is IOException -> ErrorEntity.Network
             is HttpException -> {
                 when (throwable.code()) {
-
-                    // not found
                     HttpURLConnection.HTTP_NOT_FOUND -> ErrorEntity.NotFound
-
-                    // access denied
                     HttpURLConnection.HTTP_FORBIDDEN -> ErrorEntity.AccessDenied
-
-                    // unavailable service
                     HttpURLConnection.HTTP_UNAVAILABLE -> ErrorEntity.ServiceUnavailable
-
-                    // all the others will be treated as unknown error
                     else -> ErrorEntity.Network
                 }
             }

@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -12,6 +11,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.app.cocktailapp.databinding.FragmentDrinkInfoBinding
+import com.app.cocktailapp.ui.expresso.EspressoIdlingResource
 import com.app.cocktailapp.ui.base.BaseFragment
 import com.app.cocktailapp.ui.model.Drink
 import com.app.cocktailapp.ui.model.State
@@ -44,13 +44,14 @@ class DrinkInfoFragment : BaseFragment() {
     }
 
     override fun subscribeUi() {
-        observeResultState()
+        observeDrinkData()
         binding.btnBack.setOnClickListener {
             findNavController().popBackStack()
         }
     }
 
-    private fun observeResultState() {
+    private fun observeDrinkData() {
+        EspressoIdlingResource.increment()
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 drinkInfoViewModel.getDrinkState.collectLatest { result ->
@@ -65,7 +66,7 @@ class DrinkInfoFragment : BaseFragment() {
 
     private fun onInitialState(result: State<List<Drink>>) {
         if (result.isInitialState) {
-            drinkInfoViewModel.fetchDrinks(drinkItem.drinks.idDrink.toString())
+            drinkInfoViewModel.fetchDrink(drinkItem.drinks.idDrink.toString())
         }
     }
 
@@ -73,6 +74,10 @@ class DrinkInfoFragment : BaseFragment() {
         result.data?.let {
             updateProgress(false)
             binding.item = it.get(0)
+
+            if (!EspressoIdlingResource.getIdlingResource().isIdleNow) {
+                EspressoIdlingResource.decrement()
+            }
         }
     }
 
@@ -85,8 +90,8 @@ class DrinkInfoFragment : BaseFragment() {
     private fun onErrorState(result: State<List<Drink>>) {
         result.error?.let {
             updateProgress(false)
-            Toast.makeText(requireContext(), result.error.message, Toast.LENGTH_SHORT)
-                .show()
+            showMessage(result.error.message)
+            //Toast.makeText(requireContext(), result.error.message, Toast.LENGTH_SHORT).show()
         }
     }
 

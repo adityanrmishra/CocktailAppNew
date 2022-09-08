@@ -30,9 +30,14 @@ ext {
     def testKotlinxCoroutines = '1.6.4'
     def testMockitoCore = '4.7.0'
     def testJunit = "4.13.2"
-    def androidTestJunit = "1.1.3"
-    def androidTestEspressoCore = "3.4.0"
+    def androidTestJunit = "1.1.4-alpha07"
+    def androidTestEspressoCore = "3.5.0-alpha07"
     def picassoVersion = "2.5.2"
+    def androidTestRunner = "1.4.0"
+    def androidTestRules = "1.4.1-alpha07"
+    def androidExpressTestIdling = "3.4.0"
+    def androidExpressTestCont = "3.5.0-alpha07"
+    def unitMockkTesting = "1.9.3"
 
     classPaths = [
             gradlePath      : "com.android.tools.build:gradle:$gradleVersion",
@@ -84,7 +89,12 @@ ext {
             unitTestingMockitoCore: "org.mockito:mockito-core:$testMockitoCore",
             unitTestingJunit      : "junit:junit:$testJunit",
             uiTestingJunit        : "androidx.test.ext:junit:$androidTestJunit",
-            uiTestingEspresso     : "androidx.test.espresso:espresso-core:$androidTestEspressoCore"
+            uiTestingEspresso     : "androidx.test.espresso:espresso-core:$androidTestEspressoCore",
+            uiTestRunner          : "androidx.test:runner:$androidTestRunner",
+            uiTestRules           : "androidx.test:rules:$androidTestRules",
+            uiTestExpressoIdling  : "androidx.test.espresso:espresso-idling-resource:$androidExpressTestIdling",
+            uiTestExpressoIdCont  : "androidx.test.espresso:espresso-contrib:$androidExpressTestCont",
+            unitTestingMockk      : "io.mockk:mockk:$unitMockkTesting"
     ]
     others = [
             picasso: "com.squareup.picasso:picasso:$picassoVersion"

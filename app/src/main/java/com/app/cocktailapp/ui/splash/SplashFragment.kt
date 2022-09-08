@@ -9,6 +9,7 @@ import androidx.navigation.fragment.findNavController
 import com.app.cocktailapp.R
 import com.app.cocktailapp.core.Resource
 import com.app.cocktailapp.databinding.FragmentSplashBinding
+import com.app.cocktailapp.ui.expresso.EspressoIdlingResource
 import com.app.cocktailapp.ui.base.BaseFragment
 
 class SplashFragment : BaseFragment() {
@@ -30,6 +31,8 @@ class SplashFragment : BaseFragment() {
     }
 
     override fun subscribeUi() {
+        EspressoIdlingResource.increment()
+
         splashViewModel.isOk.observe(viewLifecycleOwner) { result ->
             when (result) {
                 is Resource.Loading -> {
@@ -41,6 +44,7 @@ class SplashFragment : BaseFragment() {
                     gotoCocktailDrinks()
                 }
                 is Resource.Error -> {
+                    binding?.included?.loading?.hide()
                     showMessage(R.string.unknown_error.toString())
                 }
             }
@@ -48,6 +52,9 @@ class SplashFragment : BaseFragment() {
     }
 
     private fun gotoCocktailDrinks() {
+        if (!EspressoIdlingResource.getIdlingResource().isIdleNow) {
+            EspressoIdlingResource.decrement()
+        }
         binding?.let {
             findNavController().navigate(R.id.action_SplashFragment_to_DrinksFragment)
         }

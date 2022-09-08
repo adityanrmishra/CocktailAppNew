@@ -6,7 +6,7 @@ import com.app.cocktailapp.core.Resource
 import com.app.cocktailapp.domain.usecase.DrinkFilterUseCase
 import com.app.cocktailapp.domain.usecase.DrinksUseCase
 import com.app.cocktailapp.ui.mapper.DrinkMapperUI
-import com.app.cocktailapp.ui.mapper.ErrorViewMapperUI
+import com.app.cocktailapp.ui.mapper.ErrorMapperUI
 import com.app.cocktailapp.ui.mapper.FilterMapperUI
 import com.app.cocktailapp.ui.model.Drink
 import com.app.cocktailapp.ui.model.Filter
@@ -22,14 +22,13 @@ import javax.inject.Inject
 class DrinksViewModel @Inject constructor(
     private val drinkFilterUseCase: DrinkFilterUseCase,
     private val filterMapperUI: FilterMapperUI,
-    private val errorViewMapper: ErrorViewMapperUI,
     private val drinksUseCase: DrinksUseCase,
-    private val drinkMapperUI: DrinkMapperUI
-
+    private val drinkMapperUI: DrinkMapperUI,
+    private val errorViewMapper: ErrorMapperUI,
 ) :
     BaseViewModel() {
 
-    var defaultCategory = "Cocktail"
+    var defaultCategory = "Ordinary Drink"
 
     private val _getFilterState =
         MutableStateFlow(State<List<Filter>>(isInitialState = true))
@@ -41,13 +40,11 @@ class DrinksViewModel @Inject constructor(
     val getDrinksState: StateFlow<State<List<Drink>>> = _getDrinksState
     private lateinit var _drinksList: List<Drink>
 
-
     init {
-        setDrinkCategory(defaultCategory)
         fetchDrinkFilter()
     }
 
-    private fun fetchDrinkFilter() {
+    fun fetchDrinkFilter() {
         drinkFilterUseCase().onEach {
             when (it) {
                 is Resource.Loading -> {
@@ -66,8 +63,8 @@ class DrinksViewModel @Inject constructor(
         }.launchIn(viewModelScope)
     }
 
-    fun fetchDrinks() {
-        drinksUseCase(defaultCategory).onEach {
+    fun fetchDrinks(category: String) {
+        drinksUseCase(category).onEach {
             when (it) {
                 is Resource.Loading -> {
                     _getDrinksState.value = State(isLoading = true)

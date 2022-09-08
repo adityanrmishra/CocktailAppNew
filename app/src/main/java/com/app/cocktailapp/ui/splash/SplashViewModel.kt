@@ -5,14 +5,13 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.app.cocktailapp.ui.base.BaseViewModel
 import com.app.cocktailapp.core.Resource
-import com.app.cocktailapp.ui.mapper.ErrorViewMapperUI
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class SplashViewModel @Inject constructor(private val errorViewMapper: ErrorViewMapperUI) :
+class SplashViewModel @Inject constructor() :
     BaseViewModel() {
 
     private val _isOk = MutableLiveData<Resource<Boolean>>()
@@ -22,7 +21,7 @@ class SplashViewModel @Inject constructor(private val errorViewMapper: ErrorView
         load()
     }
 
-    private fun load(timeMillis: Long = SPLASH_TIME) {
+    fun load(timeMillis: Long = SPLASH_TIME) {
         _isOk.value = Resource.Loading()
         viewModelScope.launch {
             delay(timeMillis = timeMillis)
