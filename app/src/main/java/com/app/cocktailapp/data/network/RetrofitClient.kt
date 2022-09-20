@@ -1,13 +1,12 @@
 package com.app.cocktailapp.data.network
 
 import android.content.Context
-import com.app.cocktailapp.core.NetworkConfig
-import com.app.cocktailapp.core.NetworkConfig.CACHE_DIRECTORY
-import com.app.cocktailapp.core.NetworkConfig.CACHE_HEADER_CACHE_CONTROL
-import com.app.cocktailapp.core.NetworkConfig.CACHE_HEADER_EXPIRES
-import com.app.cocktailapp.core.NetworkConfig.CACHE_HEADER_PRAGMA
-import com.app.cocktailapp.core.NetworkConfig.CACHE_SIZE_BYTES
-import com.app.cocktailapp.core.CheckInternet.isOnline
+import com.app.cocktailapp.data.network.NetworkConfig.CACHE_DIRECTORY
+import com.app.cocktailapp.data.network.NetworkConfig.CACHE_HEADER_CACHE_CONTROL
+import com.app.cocktailapp.data.network.NetworkConfig.CACHE_HEADER_EXPIRES
+import com.app.cocktailapp.data.network.NetworkConfig.CACHE_HEADER_PRAGMA
+import com.app.cocktailapp.data.network.NetworkConfig.CACHE_SIZE_BYTES
+import com.app.cocktailapp.data.network.CheckInternet.isOnline
 import dagger.hilt.android.qualifiers.ApplicationContext
 import okhttp3.*
 import okhttp3.logging.HttpLoggingInterceptor

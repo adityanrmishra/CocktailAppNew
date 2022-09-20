@@ -1,27 +1,33 @@
 package com.app.cocktailapp.ui.adapter
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.app.cocktailapp.databinding.ItemDrinkBinding
-import com.app.cocktailapp.ui.extension.setOnSafeClickListener
+import com.app.cocktailapp.ui.extension.DrinkDiffUtilCallback
+import com.app.cocktailapp.ui.extension.setImageUrl
 import com.app.cocktailapp.ui.model.Drink
 import javax.inject.Inject
 
-class DrinksAdapter @Inject constructor(
-    private val list: ArrayList<Drink>,
-    private val onStarClick: (details: Drink, view: View) -> Unit
-) : RecyclerView.Adapter<DrinksAdapter.DrinkHolder>() {
+class DrinksAdapter @Inject constructor() : RecyclerView.Adapter<DrinksAdapter.DrinkHolder>() {
+
+    var list = mutableListOf<Drink>()
+    private var listener: ((Drink) -> Unit)? = null
 
     inner class DrinkHolder(private val binding: ItemDrinkBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: Drink) {
-            binding.item = item
-            binding.position = adapterPosition
-            binding.root.setOnSafeClickListener {
-                onStarClick.invoke(item, binding.profPic)
+            with(item) {
+               binding.root.setOnClickListener {
+                    listener?.let {
+                        it(item)
+                    }
+                }
+                binding.tvTitle.text = this.idDrink
+                binding.tvName.text = this.strDrink
+                setImageUrl(binding.ivDrink, this.strDrinkThumb, true)
             }
         }
     }
@@ -38,10 +44,14 @@ class DrinksAdapter @Inject constructor(
 
     override fun getItemCount() = list.size
 
+    fun itemClickListener(drink: (Drink) -> Unit) {
+        listener = drink
+    }
+
     fun update(newList: List<Drink>) {
+        val diffResult = DiffUtil.calculateDiff(DrinkDiffUtilCallback(list, newList))
         list.clear()
         list.addAll(newList)
-        notifyItemRangeChanged(0, list.size)
-        notifyDataSetChanged()
+        diffResult.dispatchUpdatesTo(this)
     }
 }

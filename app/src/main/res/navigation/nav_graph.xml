@@ -30,6 +30,16 @@
         android:name="com.app.cocktailapp.ui.detail.DrinkInfoFragment"
         android:label="@string/app_name"
         tools:layout="@layout/fragment_drink_info">
+        <argument
+            android:name="drink_id"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="drink_title"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
     </fragment>
 
 </navigation>

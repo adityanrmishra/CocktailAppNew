@@ -4,16 +4,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.app.cocktailapp.databinding.FragmentDrinkInfoBinding
 import com.app.cocktailapp.ui.expresso.EspressoIdlingResource
 import com.app.cocktailapp.ui.base.BaseFragment
-import com.app.cocktailapp.ui.model.Drink
+import com.app.cocktailapp.ui.extension.setImageUrl
+import com.app.cocktailapp.ui.model.DrinkInfo
 import com.app.cocktailapp.ui.model.State
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -23,8 +24,7 @@ class DrinkInfoFragment : BaseFragment() {
     private var _binding: FragmentDrinkInfoBinding? = null
     private val binding get() = _binding!!
     private val drinkInfoViewModel by viewModels<DrinkInfoViewModel>()
-
-    private val drinkItem by lazy { Args.fromBundle(arguments) }
+    private val args: DrinkInfoFragmentArgs by navArgs()
 
     companion object {
         fun newInstance() = DrinkInfoFragment()
@@ -44,6 +44,7 @@ class DrinkInfoFragment : BaseFragment() {
     }
 
     override fun subscribeUi() {
+        binding.tvHeaderTitle.text = args.drinkTitle.toString()
         observeDrinkData()
         binding.btnBack.setOnClickListener {
             findNavController().popBackStack()
@@ -54,7 +55,7 @@ class DrinkInfoFragment : BaseFragment() {
         EspressoIdlingResource.increment()
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                drinkInfoViewModel.getDrinkState.collectLatest { result ->
+                drinkInfoViewModel.getDrinkInfoState.collectLatest { result ->
                     onInitialState(result)
                     onLoadingState(result)
                     onSuccessState(result)
@@ -64,31 +65,30 @@ class DrinkInfoFragment : BaseFragment() {
         }
     }
 
-    private fun onInitialState(result: State<List<Drink>>) {
+    private fun onInitialState(result: State<List<DrinkInfo>>) {
         if (result.isInitialState) {
-            drinkInfoViewModel.fetchDrink(drinkItem.drinks.idDrink.toString())
+            drinkInfoViewModel.fetchDrink(args.drinkId.toString())
         }
     }
 
-    private fun onSuccessState(result: State<List<Drink>>) {
-        result.data?.let {
+    private fun onSuccessState(result: State<List<DrinkInfo>>) {
+        result.data?.run {
             updateProgress(false)
-            binding.item = it.get(0)
-
+            updateUI(result.data.get(0))
             if (!EspressoIdlingResource.getIdlingResource().isIdleNow) {
                 EspressoIdlingResource.decrement()
             }
         }
     }
 
-    private fun onLoadingState(result: State<List<Drink>>) {
+    private fun onLoadingState(result: State<List<DrinkInfo>>) {
         if (result.isLoading) {
             updateProgress(true)
         }
     }
 
-    private fun onErrorState(result: State<List<Drink>>) {
-        result.error?.let {
+    private fun onErrorState(result: State<List<DrinkInfo>>) {
+        result.error?.run {
             updateProgress(false)
             showMessage(result.error.message)
             //Toast.makeText(requireContext(), result.error.message, Toast.LENGTH_SHORT).show()
@@ -103,19 +103,17 @@ class DrinkInfoFragment : BaseFragment() {
         }
     }
 
-    class Args(val drinks: Drink) {
-        companion object {
-            const val ARG_ITEM = "drinkItem"
-            fun fromBundle(bundle: Bundle?): Args {
-                if (bundle == null)
-                    throw IllegalStateException("Arguments must be passed to fragment")
-                val details = bundle.getParcelable<Drink>(ARG_ITEM)
-                    ?: throw IllegalStateException("CharacterEntity must be passed as an argument to fragment")
-                return Args(details)
-            }
-        }
-
-        fun toBundle() = bundleOf(ARG_ITEM to drinks)
+    private fun updateUI(drinkInfo: DrinkInfo) {
+        setImageUrl(binding.ivDrinkIcon, drinkInfo.strDrinkThumb, true)
+        binding.tvAlias.text = drinkInfo.strDrink
+        binding.tvId.text = drinkInfo.idDrink
+        binding.tvCategory.text = drinkInfo.strCategory
+        binding.tvAlcoholic.text = drinkInfo.strAlcoholic
+        binding.tvGlassType.text = drinkInfo.strGlass
+        binding.tvUpdatedDate.text = drinkInfo.dateModified
+        binding.tvIngredient.text = drinkInfo.strIngredient1
+        binding.tvMeasure.text = drinkInfo.strMeasure1
+        binding.tvInstructions.text = drinkInfo.strInstructions
     }
 
 }
