@@ -1,7 +1,7 @@
 package com.app.cocktailapp.ui.viewmodel
 
 import androidx.lifecycle.LiveData
-import com.app.cocktailapp.core.Resource
+import com.app.cocktailapp.common.Resource
 import com.app.cocktailapp.observeForTesting
 import com.app.cocktailapp.ui.splash.SplashViewModel
 import io.mockk.unmockkAll

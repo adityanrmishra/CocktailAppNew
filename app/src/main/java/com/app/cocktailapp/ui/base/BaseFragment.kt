@@ -2,6 +2,7 @@ package com.app.cocktailapp.ui.base
 
 import android.os.Bundle
 import android.view.View
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import com.app.cocktailapp.R
 import com.google.android.material.snackbar.Snackbar
@@ -9,6 +10,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 abstract class BaseFragment : Fragment() {
+
     private var snackBar: Snackbar? = null
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

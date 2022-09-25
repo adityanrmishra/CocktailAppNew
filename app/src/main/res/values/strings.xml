@@ -9,9 +9,7 @@
     <string name="go_back">Back</string>
     <string name="favourite">favourite</string>
     <string name="drink_id">Drink Id</string>
-    <string name="drink_tag">Tag</string>
     <string name="drink_category">Category</string>
-    <string name="drink_iba">IBA</string>
     <string name="drink_alcoholic">Alcoholic</string>
     <string name="drink_glass_type">Glass Type</string>
     <string name="drink_instructions">Instructions</string>

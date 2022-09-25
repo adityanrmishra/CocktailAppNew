@@ -5,5 +5,5 @@ import com.app.cocktailapp.domain.model.FilterModel
 import kotlinx.coroutines.flow.Flow
 
 interface FilterRepositoryImp {
-    suspend fun getFilters(): Flow<Resource<List<FilterModel>>>
+    fun getFilters(): Flow<Resource<List<FilterModel>>>
 }

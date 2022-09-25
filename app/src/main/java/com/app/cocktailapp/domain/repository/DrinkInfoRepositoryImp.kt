@@ -6,5 +6,5 @@ import kotlinx.coroutines.flow.Flow
 
 
 interface DrinkInfoRepositoryImp {
-    suspend fun getDrinkById(id: String): Flow<Resource<List<DrinkModel>>>
+    fun getDrinkById(id: String): Flow<Resource<List<DrinkModel>>>
 }

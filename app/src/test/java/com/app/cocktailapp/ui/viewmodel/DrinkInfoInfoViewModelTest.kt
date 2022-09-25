@@ -1,9 +1,9 @@
 package com.app.cocktailapp.ui.viewmodel
 
 import android.content.Context
-import com.app.cocktailapp.core.MockResponse
-import com.app.cocktailapp.core.idDrink
-import com.app.cocktailapp.domain.usecase.DrinkUseCase
+import com.app.cocktailapp.data.MockResp
+import com.app.cocktailapp.data.idDrink
+import com.app.cocktailapp.domain.usecase.DrinkInfoUseCaseImp
 import com.app.cocktailapp.ui.detail.DrinkInfoViewModel
 import com.app.cocktailapp.ui.mapper.DrinkMapperUI
 import com.app.cocktailapp.ui.mapper.ErrorMapperUI
@@ -17,34 +17,34 @@ import org.junit.Assert
 import org.junit.Test
 
 @ExperimentalCoroutinesApi
-class DrinkInfoViewModelTest: BaseViewModelTest() {
+class DrinkInfoInfoViewModelTest: BaseViewModelTest() {
 
     private val mContextMock = mockk<Context>(relaxed = true)
-    private val drinkUseCase = mockk<DrinkUseCase>()
+    private val drinkInfoUseCaseImp = mockk<DrinkInfoUseCaseImp>()
     private val drinkMapperUI = DrinkMapperUI()
     private val errorMapperUI = ErrorMapperUI(mContextMock)
 
     private val drinkInfoViewModel: DrinkInfoViewModel by lazy {
         DrinkInfoViewModel(
-            errorMapperUI,
-            drinkUseCase,
-            drinkMapperUI
+            drinkInfoUseCaseImp,
+            drinkMapperUI,
+            errorMapperUI
         )
     }
 
     @Test
     fun `Given response when invoke drink info use case expect response contains idDrink`() =
         runTest {
-            coEvery { drinkUseCase.invoke(idDrink) } returns MockResponse.getDrinkInfoResourceData()
+            coEvery { drinkInfoUseCaseImp.getDrinkById(idDrink) } returns MockResp.getDrinkInfoResourceData()
             drinkInfoViewModel.fetchDrink(idDrink)
-            Assert.assertNotNull(drinkInfoViewModel.getDrinkState.value.data)
+            Assert.assertNotNull(drinkInfoViewModel.getDrinkInfoState.value.data)
         }
 
     @Test
     fun `Given error when invoke details use case expect null data`() = runTest {
-        coEvery { drinkUseCase.invoke(idDrink) } returns MockResponse.getDrinkInfoFailureMock()
+        coEvery { drinkInfoUseCaseImp.getDrinkById(idDrink) } returns MockResp.getDrinkInfoFailureMock()
         drinkInfoViewModel.fetchDrink(idDrink)
-        Assert.assertNotNull(drinkInfoViewModel.getDrinkState.value.error)
+        Assert.assertNotNull(drinkInfoViewModel.getDrinkInfoState.value.error)
     }
 
     @After

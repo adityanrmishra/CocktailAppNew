@@ -39,10 +39,6 @@ class DrinksViewModel @Inject constructor(
     val getDrinkState: StateFlow<State<List<Drink>>> = _getDrinkState
     private lateinit var _drinkList: List<Drink>
 
-    init {
-        fetchDrinkFilter()
-    }
-
     fun fetchDrinkFilter() {
         viewModelScope.launch {
             filterUseCaseImp.getFilters().collect {
@@ -88,6 +84,12 @@ class DrinksViewModel @Inject constructor(
     }
 
     fun setDrinkCategory(category: String) {
-        defaultCategory = category
+        if(!isCheckedChip(category)) {
+            defaultCategory = category
+        }
+    }
+
+    fun isCheckedChip(category: String): Boolean {
+        return category == defaultCategory
     }
 }

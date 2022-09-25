@@ -48,23 +48,4 @@ class DrinkInfoViewModel @Inject constructor(
         }
     }
 
-    /*fun fetchDrink(id: String) {
-        drinkUseCase(id).onEach {
-            when (it) {
-                is Resource.Loading -> {
-                    _getDrinkInfoState.value = State(isLoading = true)
-                }
-                is Resource.Success -> {
-                    _drinkInfo =
-                        it.data?.map { drinkData -> drinkMapperUI.mapToOut(drinkData) } ?: listOf()
-                    _getDrinkInfoState.value = State(data = _drinkInfo)
-                }
-                is Resource.Error -> {
-                    _getDrinkInfoState.value =
-                        State(error = errorViewMapper.mapToOut(it.errorEntity))
-                }
-            }
-        }.launchIn(viewModelScope)
-    }*/
-
 }

@@ -1,4 +1,4 @@
-package com.app.cocktailapp.core
+package com.app.cocktailapp.common
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi

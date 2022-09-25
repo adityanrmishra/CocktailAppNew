@@ -1,7 +1,5 @@
 package com.app.cocktailapp.common
 
-import com.app.cocktailapp.common.ErrorEntity
-import com.app.cocktailapp.common.ErrorHandler
 import okio.IOException
 import retrofit2.HttpException
 import java.net.HttpURLConnection

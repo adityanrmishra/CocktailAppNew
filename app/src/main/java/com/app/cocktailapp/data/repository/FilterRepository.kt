@@ -1,13 +1,11 @@
 package com.app.cocktailapp.data.repository
 
-import com.app.cocktailapp.common.Resource
 import com.app.cocktailapp.common.ErrorHandler
+import com.app.cocktailapp.common.Resource
 import com.app.cocktailapp.data.api.ApiService
 import com.app.cocktailapp.data.mappers.FilterMapper
 import com.app.cocktailapp.data.network.NetworkConfig
-import com.app.cocktailapp.domain.model.FilterModel
 import com.app.cocktailapp.domain.repository.FilterRepositoryImp
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
@@ -18,7 +16,7 @@ class FilterRepository @Inject constructor(
     private val errorHandler: ErrorHandler
 ): FilterRepositoryImp {
 
-    override suspend fun getFilters(): Flow<Resource<List<FilterModel>>> = flow {
+    override fun getFilters() = flow {
         emit(Resource.Loading())
 
         val data = apiService.getDrinkFilter()

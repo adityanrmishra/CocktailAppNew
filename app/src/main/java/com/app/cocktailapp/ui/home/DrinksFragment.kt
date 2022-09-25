@@ -14,7 +14,6 @@ import com.app.cocktailapp.databinding.CategoryChipBinding
 import com.app.cocktailapp.databinding.FragmentDrinksBinding
 import com.app.cocktailapp.ui.adapter.DrinksAdapter
 import com.app.cocktailapp.ui.base.BaseFragment
-import com.app.cocktailapp.ui.expresso.EspressoIdlingResource
 import com.app.cocktailapp.ui.model.Drink
 import com.app.cocktailapp.ui.model.Filter
 import com.app.cocktailapp.ui.model.State
@@ -31,7 +30,7 @@ class DrinksFragment : BaseFragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentDrinksBinding.inflate(inflater, container, false)
         Log.d("", "DrinksFragment onCreateView")
@@ -41,8 +40,11 @@ class DrinksFragment : BaseFragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         Log.d("", "DrinksFragment onDestroyView")
-        //_binding = null
+        _binding = null
     }
+
+
+    // Need to remove below code
     override fun onStart() {
         Log.d("", "DrinksFragment onStart")
         super.onStart()
@@ -73,56 +75,63 @@ class DrinksFragment : BaseFragment() {
         super.onDetach()
     }
 
+    // Need to remove above code
+
     override fun subscribeUi() {
-        Log.d("", "DrinksFragment onViewCreated")
-        Log.d("", "subscribeUi")
+        Log.d("", "DrinksFragment subscribeUi onViewCreated")
         setupChip()
         adapterInit()
         observeDrinksData()
     }
 
     private fun setupChip() {
-        EspressoIdlingResource.increment()
-
         viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            viewLifecycleOwner.repeatOnLifecycle(state = Lifecycle.State.STARTED) {
                 drinksViewModel.getFilterState.collectLatest { uiState ->
-                    uiState.data?.run {
-                        if (uiState.data.isNotEmpty()) {
-                            Log.d("", "subscribeUi Chip")
-                            chipInitialization(uiState.data.toMutableList())
-                        }
-                    }
+                    onInitialStateChip(uiState)
+                    onSuccessStateChip(uiState)
+                    onErrorStateChip(uiState)
                 }
             }
         }
     }
 
+    private fun onInitialStateChip(result: State<List<Filter>>) {
+        if (result.isInitialState) {
+            drinksViewModel.fetchDrinkFilter()
+        }
+    }
+
+    private fun onSuccessStateChip(result: State<List<Filter>>) {
+        result.data?.run {
+            if (result.data.isNotEmpty()) {
+                chipInitialization(result.data.toMutableList())
+            }
+        }
+    }
+
+    private fun onErrorStateChip(result: State<List<Filter>>) {
+        result.error?.run {
+            showMessage(result.error.message)
+        }
+    }
+
     private fun chipInitialization(categories: List<Filter>) {
+        Log.d("chipInitialization", "DrinksFragment chipInitialization")
         for (category in categories) {
             val chip = createChip(category.strCategory)
-            //This should move to VM
-            if (chip.text.toString() == drinksViewModel.defaultCategory) {
-                chip.isChecked = true
-                drinksViewModel.setDrinkCategory(chip.text.toString())
-            }
-
+            chip.isChecked = drinksViewModel.isCheckedChip(chip.text.toString())
             chip.setOnClickListener { view ->
                 val text = (view as Chip).text.toString()
-                if (text != drinksViewModel.defaultCategory) {
-                    drinksViewModel.setDrinkCategory(chip.text.toString())
-                    drinksViewModel.fetchDrinks(drinksViewModel.defaultCategory)
-                } else {
-                    chip.isChecked = true
-                    drinksViewModel.setDrinkCategory(chip.text.toString())
+                when {
+                    !drinksViewModel.isCheckedChip(text) -> {
+                        drinksViewModel.setDrinkCategory(text)
+                        drinksViewModel.fetchDrinks(drinksViewModel.defaultCategory)
+                    }
                 }
+                chip.isChecked = drinksViewModel.isCheckedChip(text)
             }
-
             binding.drinkCategory.addView(chip)
-        }
-
-        if (!EspressoIdlingResource.getIdlingResource().isIdleNow) {
-            EspressoIdlingResource.decrement()
         }
     }
 
@@ -133,6 +142,7 @@ class DrinksFragment : BaseFragment() {
     }
 
     private fun adapterInit() {
+        Log.d("adapterInit", "DrinksFragment adapterInit")
         binding.drinkRecyclerView.apply {
             adapter = drinksAdapter
         }
@@ -140,7 +150,6 @@ class DrinksFragment : BaseFragment() {
     }
 
     private fun observeDrinksData() {
-        EspressoIdlingResource.increment()
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 drinksViewModel.getDrinkState.collectLatest { uiState ->
@@ -154,9 +163,7 @@ class DrinksFragment : BaseFragment() {
     }
 
     private fun onInitialState(result: State<List<Drink>>) {
-        if (result.isInitialState) {
-            drinksViewModel.fetchDrinks(drinksViewModel.defaultCategory)
-        }
+        if (result.isInitialState) drinksViewModel.fetchDrinks(drinksViewModel.defaultCategory)
     }
 
     private fun onSuccessState(state: State<List<Drink>>) {
@@ -166,14 +173,9 @@ class DrinksFragment : BaseFragment() {
             } else {
                 binding.noResultFound.visibility = View.GONE
                 drinksAdapter.update(state.data.toMutableList())
-
-                if (!EspressoIdlingResource.getIdlingResource().isIdleNow) {
-                    EspressoIdlingResource.decrement()
-                }
             }
             binding.included.loading.visibility = View.GONE
         }
-
     }
 
     private fun onErrorState(state: State<List<Drink>>) {

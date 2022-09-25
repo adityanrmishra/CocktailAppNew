@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class DrinkInfoUseCaseImp @Inject constructor(private val drinkInfoRepositoryImp: DrinkInfoRepositoryImp) {
-    suspend fun getDrinkById(id: String): Flow<Resource<List<DrinkModel>>> {
+    fun getDrinkById(id: String): Flow<Resource<List<DrinkModel>>> {
         return drinkInfoRepositoryImp.getDrinkById(id)
     }
 }

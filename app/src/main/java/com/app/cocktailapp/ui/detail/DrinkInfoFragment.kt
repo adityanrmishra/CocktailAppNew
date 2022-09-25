@@ -11,7 +11,6 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.app.cocktailapp.databinding.FragmentDrinkInfoBinding
-import com.app.cocktailapp.ui.expresso.EspressoIdlingResource
 import com.app.cocktailapp.ui.base.BaseFragment
 import com.app.cocktailapp.ui.extension.setImageUrl
 import com.app.cocktailapp.ui.model.DrinkInfo
@@ -32,9 +31,10 @@ class DrinkInfoFragment : BaseFragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentDrinkInfoBinding.inflate(inflater, container, false)
+
         return binding.root
     }
 
@@ -52,7 +52,6 @@ class DrinkInfoFragment : BaseFragment() {
     }
 
     private fun observeDrinkData() {
-        EspressoIdlingResource.increment()
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 drinkInfoViewModel.getDrinkInfoState.collectLatest { result ->
@@ -75,9 +74,6 @@ class DrinkInfoFragment : BaseFragment() {
         result.data?.run {
             updateProgress(false)
             updateUI(result.data.get(0))
-            if (!EspressoIdlingResource.getIdlingResource().isIdleNow) {
-                EspressoIdlingResource.decrement()
-            }
         }
     }
 
@@ -91,7 +87,6 @@ class DrinkInfoFragment : BaseFragment() {
         result.error?.run {
             updateProgress(false)
             showMessage(result.error.message)
-            //Toast.makeText(requireContext(), result.error.message, Toast.LENGTH_SHORT).show()
         }
     }
 

@@ -6,8 +6,6 @@ sealed class Resource<T>(
     val errorEntity: ErrorEntity? = null
 ) {
 
-    //
-
     class Loading<T> : Resource<T>()
     class Success<T>(data: T) : Resource<T>(data)
     class Error<T>(message: String, data: T? = null, errorEntity: ErrorEntity? = null) :

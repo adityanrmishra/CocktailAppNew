@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class DrinksUseCaseImp @Inject constructor(private val drinksRepositoryImp: DrinksRepositoryImp) {
-    suspend fun fetchDrinksByCategory(filter: String): Flow<Resource<List<DrinksModel>>> {
+    fun fetchDrinksByCategory(filter: String): Flow<Resource<List<DrinksModel>>> {
         return drinksRepositoryImp.fetchDrinksByCategory(filter)
     }
 }
