@@ -10,9 +10,18 @@ buildscript {
         classpath classPaths.gradlePath
         classpath classPaths.hiltPath
         classpath classPaths.kotlinGradlePath
+        classpath classPaths.navigationPath
     }
 }
 
 task clean(type: Delete) {
     delete rootProject.buildDir
+}
+
+task runUnitTests(dependsOn: [':app:testDebugUnitTest']) {
+    description 'Run all unit tests'
+}
+
+task runAcceptanceTests(dependsOn: [':app:connectedAndroidTest']) {
+    description 'Run all acceptance tests.'
 }

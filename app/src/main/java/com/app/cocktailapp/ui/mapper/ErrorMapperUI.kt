@@ -1,9 +1,8 @@
 package com.app.cocktailapp.ui.mapper
 
 import android.content.Context
-import com.app.cocktailapp.core.Mapper
 import com.app.cocktailapp.R
-import com.app.cocktailapp.core.ErrorEntity
+import com.app.cocktailapp.common.ErrorEntity
 import com.app.cocktailapp.ui.model.ErrorType
 import com.app.cocktailapp.ui.model.Error
 import dagger.hilt.android.qualifiers.ApplicationContext

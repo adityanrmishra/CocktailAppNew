@@ -1,7 +1,5 @@
 <resources>
-
     <dimen name="progressbar_height_width">60dp</dimen>
-
     <dimen name="dimen_4dp">4dp</dimen>
     <dimen name="dimen_8dp">8dp</dimen>
     <dimen name="dimen_16dp">16dp</dimen>
@@ -9,8 +7,5 @@
     <dimen name="dimen_20dp">20dp</dimen>
     <dimen name="adapter_card_height_dimen_200dp">200dp</dimen>
     <dimen name="dimen_250dp">250dp</dimen>
-
     <dimen name="dimen_chip_vertical_space">-10dp</dimen>
-
-
 </resources>

@@ -4,6 +4,7 @@ package com.app.cocktailapp.ui
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
+import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition
@@ -20,6 +21,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
+
 @LargeTest
 @RunWith(AndroidJUnit4::class)
 class UIMainActivityTest : UIBaseTest() {
@@ -29,8 +31,12 @@ class UIMainActivityTest : UIBaseTest() {
     var mActivityScenarioRule = ActivityScenarioRule(MainActivity::class.java)
 
     @Test
-    fun mainActivityTest() {
+    fun appLaunchesSuccessfully() {
+        ActivityScenario.launch(MainActivity::class.java)
+    }
 
+    @Test
+    fun mainActivityTest() {
         val recyclerView = onView(
             allOf(
                 withId(R.id.drink_recycler_view),
@@ -62,7 +68,7 @@ class UIMainActivityTest : UIBaseTest() {
     }
 
     private fun childAtPosition(
-        parentMatcher: Matcher<View>, position: Int
+        parentMatcher: Matcher<View>, position: Int,
     ): Matcher<View> {
 
         return object : TypeSafeMatcher<View>() {

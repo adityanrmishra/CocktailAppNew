@@ -1,5 +1,5 @@
 package com.app.cocktailapp.domain.model
 
-class FilterModel (
-    var strCategory : String? = null
+data class FilterModel (
+    var strCategory : String
 )

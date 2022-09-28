@@ -2,9 +2,10 @@ plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-android'
-    id 'kotlin-parcelize'
     id 'dagger.hilt.android.plugin'
     id 'kotlin-kapt'
+    id 'kotlin-parcelize'
+    id 'androidx.navigation.safeargs.kotlin'
 }
 
 apply from: '../dependencies.gradle'
@@ -27,10 +28,6 @@ android {
             minifyEnabled false
             debuggable true
         }
-        qa {
-            minifyEnabled true
-            debuggable false
-        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
@@ -45,7 +42,7 @@ android {
     }
     buildFeatures {
         viewBinding true
-        dataBinding true
+        dataBinding false
     }
 }
 

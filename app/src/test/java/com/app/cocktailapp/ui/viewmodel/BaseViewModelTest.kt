@@ -1,7 +1,7 @@
 package com.app.cocktailapp.ui.viewmodel
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.app.cocktailapp.core.TestCoroutineRule
+import com.app.cocktailapp.common.TestCoroutineRule
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.FixMethodOrder
 import org.junit.Rule

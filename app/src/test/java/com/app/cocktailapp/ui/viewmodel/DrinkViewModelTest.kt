@@ -1,0 +1,85 @@
+package com.app.cocktailapp.ui.viewmodel
+
+import android.content.Context
+import com.app.cocktailapp.data.MockResp
+import com.app.cocktailapp.data.strCategory
+import com.app.cocktailapp.domain.usecase.DrinksUseCaseImp
+import com.app.cocktailapp.domain.usecase.FilterUseCaseImp
+import com.app.cocktailapp.ui.home.DrinksViewModel
+import com.app.cocktailapp.ui.mapper.DrinksMapperUI
+import com.app.cocktailapp.ui.mapper.ErrorMapperUI
+import com.app.cocktailapp.ui.mapper.FilterMapperUI
+import com.app.cocktailapp.ui.model.DrinkInfo
+import io.mockk.coEvery
+import io.mockk.mockk
+import io.mockk.unmockkAll
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runTest
+import org.junit.After
+import org.junit.Assert
+import org.junit.Test
+
+@ExperimentalCoroutinesApi
+class DrinkViewModelTest: BaseViewModelTest() {
+
+    private val getDrinkFilterUseCase = mockk<FilterUseCaseImp>()
+    private val filterMapperUI = FilterMapperUI()
+
+    private val getDrinksUseCase = mockk<DrinksUseCaseImp>()
+    private val drinkMapperUI = DrinksMapperUI()
+
+    private val mContextMock = mockk<Context>(relaxed = true)
+    private val errorMapperUI = ErrorMapperUI(mContextMock)
+
+    private val objMockk = mockk<DrinkInfo>(relaxed = true)
+
+    private val drinksViewModel: DrinksViewModel by lazy {
+        DrinksViewModel(
+            getDrinkFilterUseCase,
+            filterMapperUI,
+            getDrinksUseCase,
+            drinkMapperUI,
+            errorMapperUI
+        )
+    }
+
+    @Test
+    fun `Given response data when getDrinkFilter expect result contains filter data`() = runTest {
+        coEvery { getDrinkFilterUseCase.getFilters() } returns MockResp.getFilterResourceData()
+        drinksViewModel.fetchDrinkFilter()
+        Assert.assertNotNull(drinksViewModel.getFilterState.value.data)
+    }
+
+    @Test
+    fun `Given response data when getDrinkFilter expect result contains error`() = runTest {
+        coEvery { getDrinkFilterUseCase.getFilters() } returns MockResp.getFilterFailureMock()
+        drinksViewModel.fetchDrinkFilter()
+        Assert.assertNotNull(drinksViewModel.getFilterState.value.error)
+    }
+
+    @Test
+    fun `Given filter category data when setDrinkCategory expect result set category filter`() = runTest {
+        coEvery { getDrinkFilterUseCase.getFilters() } returns MockResp.getFilterResourceData()
+        drinksViewModel.setDrinkCategory(strCategory)
+        Assert.assertNotNull(strCategory)
+    }
+
+    @Test
+    fun `Given response data when getDrinks expect result contains drinks data`() = runTest {
+        coEvery { getDrinksUseCase.fetchDrinksByCategory(strCategory) } returns MockResp.getDrinksResourceData()
+        drinksViewModel.fetchDrinks(strCategory)
+        Assert.assertNotNull(drinksViewModel.getDrinkState.value.data)
+    }
+
+    @Test
+    fun `Given response data when getDrinks expect result contains error`() = runTest {
+        coEvery { getDrinksUseCase.fetchDrinksByCategory(strCategory) } returns MockResp.getDrinksFailureMock()
+        drinksViewModel.fetchDrinks(strCategory)
+        Assert.assertNotNull(drinksViewModel.getDrinkState.value.error)
+    }
+
+    @After
+    fun tearDown() {
+        unmockkAll()
+    }
+}
