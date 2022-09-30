@@ -8,6 +8,6 @@ sealed class Resource<T>(
 
     class Loading<T> : Resource<T>()
     class Success<T>(data: T) : Resource<T>(data)
-    class Error<T>(message: String, data: T? = null, errorEntity: ErrorEntity? = null) :
-        Resource<T>(data, message, errorEntity)
+    class Error<T>(message: String, errorEntity: ErrorEntity? = null) :
+        Resource<T>(message = message, errorEntity = errorEntity)
 }
