@@ -315,7 +315,6 @@
             android:id="@+id/tv_instructions"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:autoSizeTextType="uniform"
             android:text="@string/drink_instructions"
             android:textAppearance="?attr/textAppearanceSubtitle2"
             android:textColor="@color/planePrimaryTextColor"
@@ -324,6 +323,8 @@
             app:layout_constraintStart_toEndOf="@id/tv_instructions_label"
             app:layout_constraintTop_toTopOf="@id/tv_instructions_label"
             app:layout_constraintWidth_percent="0.5"
+            android:ellipsize="end"
+            android:maxLines="1"
             tools:text="@string/drink_instructions" />
 
         <include
