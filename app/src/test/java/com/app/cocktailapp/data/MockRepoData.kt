@@ -36,11 +36,9 @@ object MockResp {
     }
 
     fun getFilterFailureMock(): Flow<Resource<List<FilterModel>>> = channelFlow {
-        val domainData = listOf<FilterModel>()
         send(
             Resource.Error(
                 message = "An Unknown error occurred",
-                data = domainData,
                 errorEntity = ErrorEntity.Network
             )
         )
@@ -82,11 +80,9 @@ object MockResp {
     }
 
     fun getDrinksFailureMock(): Flow<Resource<List<DrinksModel>>> = channelFlow {
-        val domainData = listOf<DrinksModel>()
         send(
             Resource.Error(
                 message = "An Unknown error occurred",
-                data = domainData,
                 errorEntity = ErrorEntity.Network
             )
         )
@@ -163,11 +159,9 @@ object MockResp {
     }
 
     fun getDrinkInfoFailureMock(): Flow<Resource<List<DrinkModel>>> = channelFlow {
-        val domainData = listOf<DrinkModel>()
         send(
             Resource.Error(
                 message = "An Unknown error occurred",
-                data = domainData,
                 errorEntity = ErrorEntity.Network
             )
         )
