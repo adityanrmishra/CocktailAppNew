@@ -7,10 +7,11 @@ import com.app.cocktailapp.ui.base.BaseViewModel
 import com.app.cocktailapp.ui.mapper.DrinkMapperUI
 import com.app.cocktailapp.ui.mapper.ErrorMapperUI
 import com.app.cocktailapp.ui.model.DrinkInfo
-import com.app.cocktailapp.ui.model.State
+import com.app.cocktailapp.ui.model.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -21,31 +22,40 @@ class DrinkInfoViewModel @Inject constructor(
     private val errorViewMapper: ErrorMapperUI,
 ) : BaseViewModel() {
 
-    private val _getDrinkInfoState =
-        MutableStateFlow(State<List<DrinkInfo>>(isInitialState = true))
-    val getDrinkInfoState: StateFlow<State<List<DrinkInfo>>> = _getDrinkInfoState
-    private lateinit var _drinkInfo: List<DrinkInfo>
+    private val _getDrinkInfoUiState =
+        MutableStateFlow<UiState<DrinkInfo>>(UiState.InitialState())
+    val getDrinkInfoUiState: StateFlow<UiState<DrinkInfo>> = _getDrinkInfoUiState
 
     fun fetchDrink(id: String) {
         viewModelScope.launch {
             drinkInfoUseCaseImp.getDrinkById(id).collect {
                 when (it) {
                     is Resource.Loading -> {
-                        _getDrinkInfoState.value = State(isLoading = true)
+                        _getDrinkInfoUiState.update { (UiState.ShowLoading()) }// = UiState(isLoading = true)
                     }
                     is Resource.Success -> {
-                        _drinkInfo =
+                        val drinkInfo =
                             it.data?.map { drinkData -> drinkMapperUI.mapToOut(drinkData) }
                                 ?: listOf()
-                        _getDrinkInfoState.value = State(data = _drinkInfo)
+
+                        if (drinkInfo.isNullOrEmpty()) {
+                            _getDrinkInfoUiState.update { UiState.ShowEmptyData() }
+                        } else {
+                            _getDrinkInfoUiState.update { UiState.ShowData(drinkInfo.first()) }
+                        }
                     }
                     is Resource.Error -> {
-                        _getDrinkInfoState.value =
-                            State(error = errorViewMapper.mapToOut(it.errorEntity))
+                        val error = it.errorEntity
+                        _getDrinkInfoUiState.update {
+                            UiState.ShowError(
+                                errorViewMapper.mapToOut(
+                                    error
+                                )
+                            )
+                        }
                     }
                 }
             }
         }
     }
-
 }

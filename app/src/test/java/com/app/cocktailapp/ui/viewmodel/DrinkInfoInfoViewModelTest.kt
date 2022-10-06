@@ -17,12 +17,11 @@ import org.junit.Assert
 import org.junit.Test
 
 @ExperimentalCoroutinesApi
-class DrinkInfoInfoViewModelTest: BaseViewModelTest() {
+class DrinkInfoInfoViewModelTest : BaseViewModelTest() {
 
-    private val mContextMock = mockk<Context>(relaxed = true)
     private val drinkInfoUseCaseImp = mockk<DrinkInfoUseCaseImp>()
     private val drinkMapperUI = DrinkMapperUI()
-    private val errorMapperUI = ErrorMapperUI(mContextMock)
+    private val errorMapperUI = ErrorMapperUI()
 
     private val drinkInfoViewModel: DrinkInfoViewModel by lazy {
         DrinkInfoViewModel(
@@ -36,15 +35,19 @@ class DrinkInfoInfoViewModelTest: BaseViewModelTest() {
     fun `Given response when invoke drink info use case expect response contains idDrink`() =
         runTest {
             coEvery { drinkInfoUseCaseImp.getDrinkById(idDrink) } returns MockResp.getDrinkInfoResourceData()
+
             drinkInfoViewModel.fetchDrink(idDrink)
-            Assert.assertNotNull(drinkInfoViewModel.getDrinkInfoState.value.data)
+
+            Assert.assertNotNull(drinkInfoViewModel.getDrinkInfoUiState.value)
         }
 
     @Test
     fun `Given error when invoke details use case expect null data`() = runTest {
         coEvery { drinkInfoUseCaseImp.getDrinkById(idDrink) } returns MockResp.getDrinkInfoFailureMock()
+
         drinkInfoViewModel.fetchDrink(idDrink)
-        Assert.assertNotNull(drinkInfoViewModel.getDrinkInfoState.value.error)
+
+        Assert.assertNotNull(drinkInfoViewModel.getDrinkInfoUiState.value)
     }
 
     @After

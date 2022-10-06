@@ -10,13 +10,15 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import com.app.cocktailapp.R
 import com.app.cocktailapp.databinding.CategoryChipBinding
 import com.app.cocktailapp.databinding.FragmentDrinksBinding
 import com.app.cocktailapp.ui.adapter.DrinksAdapter
 import com.app.cocktailapp.ui.base.BaseFragment
-import com.app.cocktailapp.ui.model.Drink
+import com.app.cocktailapp.ui.extension.makeInvisible
+import com.app.cocktailapp.ui.extension.makeVisible
 import com.app.cocktailapp.ui.model.Filter
-import com.app.cocktailapp.ui.model.State
+import com.app.cocktailapp.ui.model.UiState
 import com.google.android.material.chip.Chip
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -25,18 +27,14 @@ class DrinksFragment : BaseFragment() {
 
     private lateinit var binding: FragmentDrinksBinding
     private val drinksViewModel by viewModels<DrinksViewModel>()
-    private var drinksAdapter = DrinksAdapter()
-    private var root: View? = null
+    private val drinksAdapter = DrinksAdapter()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        if (root == null) {
-            binding = FragmentDrinksBinding.inflate(inflater, container, false)
-            root = binding.root
-        }
-        return root as View
+        binding = FragmentDrinksBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun subscribeUi() {
@@ -49,32 +47,25 @@ class DrinksFragment : BaseFragment() {
     private fun setupChip() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(state = Lifecycle.State.STARTED) {
-                drinksViewModel.getFilterState.collectLatest { uiState ->
-                    onInitialStateChip(uiState)
-                    onSuccessStateChip(uiState)
-                    onErrorStateChip(uiState)
+                drinksViewModel.getFilterUiState.collectLatest {
+                    when (it) {
+                        is UiState.InitialState -> {
+                            drinksViewModel.fetchDrinkFilter()
+                        }
+                        is UiState.ShowEmptyData -> {
+                            showMessage(getString(R.string.nothing_found))
+                        }
+                        is UiState.ShowData -> {
+                            if(binding.drinkCategory.isEmpty()) {
+                                chipInitialization(it.data.toMutableList())
+                            }
+                        }
+                        is UiState.ShowError -> {
+                            showMessage(it.error.message)
+                        }
+                    }
                 }
             }
-        }
-    }
-
-    private fun onInitialStateChip(result: State<List<Filter>>) {
-        if (result.isInitialState) {
-            drinksViewModel.fetchDrinkFilter()
-        }
-    }
-
-    private fun onSuccessStateChip(result: State<List<Filter>>) {
-        result.data?.run {
-            if (result.data.isNotEmpty() && binding.drinkCategory.isEmpty()) {
-                chipInitialization(result.data.toMutableList())
-            }
-        }
-    }
-
-    private fun onErrorStateChip(result: State<List<Filter>>) {
-        result.error?.run {
-            showMessage(result.error.message)
         }
     }
 
@@ -111,46 +102,31 @@ class DrinksFragment : BaseFragment() {
     private fun observeDrinksData() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                drinksViewModel.getDrinkState.collectLatest { uiState ->
-                    onInitialStateAdapter(uiState)
-                    onLoadingStateAdapter(uiState)
-                    onErrorStateAdapter(uiState)
-                    onSuccessStateAdapter(uiState)
+                drinksViewModel.getDrinkUiState.collectLatest {
+                    when (it) {
+                        is UiState.InitialState -> {
+                            drinksViewModel.fetchDrinks(drinksViewModel.defaultCategory)
+                        }
+                        is UiState.ShowLoading -> {
+                            binding.noResultFound.makeInvisible()
+                            binding.included.loading.makeVisible()
+                        }
+                        is UiState.ShowEmptyData -> {
+                            binding.included.loading.makeInvisible()
+                            binding.included.loading.makeVisible()
+                            showMessage(getString(R.string.nothing_found))
+                        }
+                        is UiState.ShowData -> {
+                            binding.included.loading.makeInvisible()
+                            drinksAdapter.update(it.data.toMutableList())
+                        }
+                        is UiState.ShowError -> {
+                            binding.included.loading.makeInvisible()
+                            showMessage(it.error.message)
+                        }
+                    }
                 }
             }
-        }
-    }
-
-    private fun onInitialStateAdapter(result: State<List<Drink>>) {
-        if (result.isInitialState) {
-            drinksViewModel.fetchDrinks(drinksViewModel.defaultCategory)
-        }
-    }
-
-    private fun onSuccessStateAdapter(state: State<List<Drink>>) {
-        state.data?.run {
-            if (state.data.isEmpty()) {
-                binding.noResultFound.visibility = View.VISIBLE
-            } else {
-                binding.noResultFound.visibility = View.GONE
-                drinksAdapter.update(state.data.toMutableList())
-            }
-            binding.included.loading.visibility = View.GONE
-        }
-    }
-
-    private fun onErrorStateAdapter(state: State<List<Drink>>) {
-        state.error?.run {
-            binding.noResultFound.visibility = View.GONE
-            binding.included.loading.visibility = View.GONE
-            showMessage(state.error.message)
-        }
-    }
-
-    private fun onLoadingStateAdapter(state: State<List<Drink>>) {
-        if (state.isLoading) {
-            binding.noResultFound.visibility = View.GONE
-            binding.included.loading.visibility = View.VISIBLE
         }
     }
 

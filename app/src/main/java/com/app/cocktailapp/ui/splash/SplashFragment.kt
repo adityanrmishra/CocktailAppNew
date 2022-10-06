@@ -10,6 +10,8 @@ import com.app.cocktailapp.R
 import com.app.cocktailapp.common.Resource
 import com.app.cocktailapp.databinding.FragmentSplashBinding
 import com.app.cocktailapp.ui.base.BaseFragment
+import com.app.cocktailapp.ui.extension.makeInvisible
+import com.app.cocktailapp.ui.extension.makeVisible
 
 class SplashFragment : BaseFragment() {
 
@@ -29,15 +31,15 @@ class SplashFragment : BaseFragment() {
         splashViewModel.isOk.observe(viewLifecycleOwner) { result ->
             when (result) {
                 is Resource.Loading -> {
-                    binding.included.loading.show()
+                    binding.included.loading.makeVisible()
                 }
                 is Resource.Success -> {
-                    binding.included.loading.hide()
-                    binding.appText.visibility = View.INVISIBLE
+                    binding.included.loading.makeInvisible()
+                    binding.appText.makeInvisible()
                     gotoCocktailDrinks()
                 }
                 is Resource.Error -> {
-                    binding.included.loading.hide()
+                    binding.included.loading.makeInvisible()
                     showMessage(R.string.unknown_error.toString())
                 }
             }

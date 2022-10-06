@@ -4,8 +4,8 @@ import android.widget.ImageView
 import com.app.cocktailapp.R
 import com.squareup.picasso.Picasso
 
-fun setImageUrl(imageView: ImageView, url: String?, isSmallerImage: Boolean) {
-    val builder = Picasso.with(imageView.context)
+fun ImageView.loadImageWithPicassoExt(url: String, isSmallerImage: Boolean) {
+    val builder = Picasso.with(context)
         .load(url)
         .error(R.drawable.ic_image_error)
     if (isSmallerImage) {
@@ -15,7 +15,10 @@ fun setImageUrl(imageView: ImageView, url: String?, isSmallerImage: Boolean) {
     } else {
         builder.fit()
     }
-    builder.into(imageView)
+    builder.into(this)
 }
+
+
+
 
 

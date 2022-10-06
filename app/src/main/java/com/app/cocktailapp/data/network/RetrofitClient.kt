@@ -47,11 +47,8 @@ class RetrofitClient @Inject constructor(
     private fun getHeaderInterceptor(): Interceptor {
         return Interceptor {
             val requestBuilder = it.request().newBuilder()
-            //hear you can add all headers you want by calling 'requestBuilder.addHeader(name ,  value)'
             requestBuilder.addHeader("Content-Type", "application/json")
             requestBuilder.addHeader("Accept", "application/json")
-            //requestBuilder.addHeader("OS", "Android-${Build.VERSION.SDK_INT}")
-            //requestBuilder.addHeader("Version", BuildConfig.VERSION_NAME)
             requestBuilder.build()
             it.proceed(requestBuilder.build())
         }

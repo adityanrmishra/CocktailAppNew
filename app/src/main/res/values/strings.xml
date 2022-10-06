@@ -3,6 +3,8 @@
     <string name="network_error">Network error</string>
     <string name="unknown_error">Unknown</string>
     <string name="service_error">Service unavailable</string>
+    <string name="access_denied_error">Access denied</string>
+    <string name="not_found_error">Not found</string>
     <string name="nothing_found">No result found</string>
     <string name="splash_screen_quotes">Weekend Cocktails</string>
     <string name="cocktail_drinks">Cocktail Drinks</string>
@@ -17,5 +19,6 @@
     <string name="drink_measure">Measure</string>
     <string name="drink_data">Updated date</string>
     <string name="exit_title">Close</string>
+    <string name="action_retry">RETRY</string>
     <string name="exit_message">Are you sure you want to exit?</string>
 </resources>

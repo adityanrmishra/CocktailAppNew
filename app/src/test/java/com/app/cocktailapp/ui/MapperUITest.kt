@@ -21,6 +21,7 @@ import org.mockito.junit.MockitoJUnitRunner
 @ExperimentalCoroutinesApi
 @RunWith(MockitoJUnitRunner::class)
 class MapperUITest {
+    
     @get:Rule
     val testInstantTaskExecutorRule: TestRule = InstantTaskExecutorRule()
 
@@ -34,8 +35,10 @@ class MapperUITest {
         var uiFilterData = listOf<Filter>()
         val mapper = FilterMapperUI()
         val data = MockResp.getFilterDataUI()
+
         uiFilterData =
             if (data.isNotEmpty()) data.map { mapper.mapToOut(it) } else uiFilterData
+
         Assert.assertEquals(strCategory, uiFilterData[0].strCategory)
     }
 
@@ -60,6 +63,7 @@ class MapperUITest {
         var uiDrinkInfoData = listOf<DrinkInfo>()
         val mapper = DrinkMapperUI()
         val data = MockResp.getDrinkInfoDataUI()
+        
         uiDrinkInfoData =
             if (data.isNotEmpty()) data.map {
                 mapper.mapToOut(
