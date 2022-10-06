@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.app.cocktailapp.databinding.ItemDrinkBinding
 import com.app.cocktailapp.ui.extension.DrinkDiffUtilCallback
-import com.app.cocktailapp.ui.extension.setImageUrl
+import com.app.cocktailapp.ui.extension.loadImageWithPicassoExt
 import com.app.cocktailapp.ui.model.Drink
 import javax.inject.Inject
 
@@ -27,7 +27,7 @@ class DrinksAdapter @Inject constructor() : RecyclerView.Adapter<DrinksAdapter.D
                 }
                 binding.tvTitle.text = this.idDrink
                 binding.tvName.text = this.strDrink
-                setImageUrl(binding.ivDrink, this.strDrinkThumb, true)
+                binding.ivDrink.loadImageWithPicassoExt(this.strDrinkThumb, true)
             }
         }
     }

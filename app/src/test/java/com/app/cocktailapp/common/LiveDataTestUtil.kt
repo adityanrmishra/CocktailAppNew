@@ -1,5 +1,5 @@
 
-package com.app.cocktailapp
+package com.app.cocktailapp.common
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import java.util.concurrent.CountDownLatch

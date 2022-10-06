@@ -28,10 +28,11 @@ class DrinkViewModelTest: BaseViewModelTest() {
     private val getDrinksUseCase = mockk<DrinksUseCaseImp>()
     private val drinkMapperUI = DrinksMapperUI()
 
-    private val mContextMock = mockk<Context>(relaxed = true)
-    private val errorMapperUI = ErrorMapperUI(mContextMock)
+    private val errorMapperUI = ErrorMapperUI()
 
-    private val objMockk = mockk<DrinkInfo>(relaxed = true)
+    private val mContextMock = mockk<Context>()
+    private val objMockk = mockk<DrinkInfo>()
+    private val objErrorMockk = mockk<Error>()
 
     private val drinksViewModel: DrinksViewModel by lazy {
         DrinksViewModel(
@@ -46,36 +47,46 @@ class DrinkViewModelTest: BaseViewModelTest() {
     @Test
     fun `Given response data when getDrinkFilter expect result contains filter data`() = runTest {
         coEvery { getDrinkFilterUseCase.getFilters() } returns MockResp.getFilterResourceData()
+
         drinksViewModel.fetchDrinkFilter()
-        Assert.assertNotNull(drinksViewModel.getFilterState.value.data)
+
+        Assert.assertNotNull(drinksViewModel.getFilterUiState.value)
     }
 
     @Test
     fun `Given response data when getDrinkFilter expect result contains error`() = runTest {
         coEvery { getDrinkFilterUseCase.getFilters() } returns MockResp.getFilterFailureMock()
+
         drinksViewModel.fetchDrinkFilter()
-        Assert.assertNotNull(drinksViewModel.getFilterState.value.error)
+
+        Assert.assertNotNull(drinksViewModel.getFilterUiState.value)
     }
 
     @Test
     fun `Given filter category data when setDrinkCategory expect result set category filter`() = runTest {
         coEvery { getDrinkFilterUseCase.getFilters() } returns MockResp.getFilterResourceData()
+
         drinksViewModel.setDrinkCategory(strCategory)
+
         Assert.assertNotNull(strCategory)
     }
 
     @Test
     fun `Given response data when getDrinks expect result contains drinks data`() = runTest {
         coEvery { getDrinksUseCase.fetchDrinksByCategory(strCategory) } returns MockResp.getDrinksResourceData()
+
         drinksViewModel.fetchDrinks(strCategory)
-        Assert.assertNotNull(drinksViewModel.getDrinkState.value.data)
+
+        Assert.assertNotNull(drinksViewModel.getDrinkUiState.value)
     }
 
     @Test
     fun `Given response data when getDrinks expect result contains error`() = runTest {
         coEvery { getDrinksUseCase.fetchDrinksByCategory(strCategory) } returns MockResp.getDrinksFailureMock()
+
         drinksViewModel.fetchDrinks(strCategory)
-        Assert.assertNotNull(drinksViewModel.getDrinkState.value.error)
+
+        Assert.assertNotNull(drinksViewModel.getDrinkUiState.value)
     }
 
     @After

@@ -10,10 +10,11 @@ import com.app.cocktailapp.ui.mapper.ErrorMapperUI
 import com.app.cocktailapp.ui.mapper.FilterMapperUI
 import com.app.cocktailapp.ui.model.Drink
 import com.app.cocktailapp.ui.model.Filter
-import com.app.cocktailapp.ui.model.State
+import com.app.cocktailapp.ui.model.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -29,32 +30,38 @@ class DrinksViewModel @Inject constructor(
 
     var defaultCategory = "Ordinary Drink"
 
-    private val _getFilterState =
-        MutableStateFlow(State<List<Filter>>(isInitialState = true))
-    val getFilterState: StateFlow<State<List<Filter>>> = _getFilterState
-    private lateinit var _filterList: List<Filter>
+    private val _getFilterUiState =
+        MutableStateFlow<UiState<List<Filter>>>(UiState.InitialState())
+    val getFilterUiState: StateFlow<UiState<List<Filter>>> = _getFilterUiState
 
-    private val _getDrinkState =
-        MutableStateFlow(State<List<Drink>>(isInitialState = true))
-    val getDrinkState: StateFlow<State<List<Drink>>> = _getDrinkState
-    private lateinit var _drinkList: List<Drink>
+    private val _getDrinkUiState =
+        MutableStateFlow<UiState<List<Drink>>>(UiState.InitialState())
+    val getDrinkUiState: StateFlow<UiState<List<Drink>>> = _getDrinkUiState
 
     fun fetchDrinkFilter() {
         viewModelScope.launch {
             filterUseCaseImp.getFilters().collect {
                 when (it) {
                     is Resource.Loading -> {
-                        _getFilterState.value = State(isLoading = true)
+                        _getFilterUiState.value = UiState.ShowLoading()
                     }
                     is Resource.Success -> {
-                        _filterList =
+                        val filterList =
                             it.data?.map { filterData -> filterMapperUI.mapToOut(filterData) }
                                 ?: listOf()
-                        _getFilterState.value = State(data = _filterList)
+                        if (filterList.isNullOrEmpty()) {
+                            _getFilterUiState.value = UiState.ShowEmptyData()
+                        } else {
+                            _getFilterUiState.value = UiState.ShowData(data = filterList)
+                        }
                     }
                     is Resource.Error -> {
-                        _getFilterState.value =
-                            State(error = errorViewMapper.mapToOut(it.errorEntity))
+                        val error = it.errorEntity
+                        _getFilterUiState.value = UiState.ShowError(
+                            errorViewMapper.mapToOut(
+                                error
+                            )
+                        )
                     }
                 }
             }
@@ -66,17 +73,29 @@ class DrinksViewModel @Inject constructor(
             drinksUseCaseImp.fetchDrinksByCategory(category).collect {
                 when (it) {
                     is Resource.Loading -> {
-                        _getDrinkState.value = State(isLoading = true)
+                        _getDrinkUiState.update { UiState.ShowLoading() }
                     }
                     is Resource.Success -> {
-                        _drinkList =
+                        val drinkList =
                             it.data?.map { drinksData -> drinksMapperUI.mapToOut(drinksData) }
                                 ?: listOf()
-                        _getDrinkState.value = State(data = _drinkList)
+
+                        if (drinkList.isNullOrEmpty()) {
+                            _getDrinkUiState.update { UiState.ShowEmptyData() }
+                        } else {
+                            _getDrinkUiState.update { UiState.ShowData(data = drinkList) }
+                        }
+
                     }
                     is Resource.Error -> {
-                        _getDrinkState.value =
-                            State(error = errorViewMapper.mapToOut(it.errorEntity))
+                        val error = it.errorEntity
+                        _getDrinkUiState.update {
+                            UiState.ShowError(
+                                errorViewMapper.mapToOut(
+                                    error
+                                )
+                            )
+                        }
                     }
                 }
             }
@@ -84,7 +103,7 @@ class DrinksViewModel @Inject constructor(
     }
 
     fun setDrinkCategory(category: String) {
-        if(!isCheckedChip(category)) {
+        if (!isCheckedChip(category)) {
             defaultCategory = category
         }
     }
@@ -92,4 +111,5 @@ class DrinksViewModel @Inject constructor(
     fun isCheckedChip(category: String): Boolean {
         return category == defaultCategory
     }
+
 }

@@ -30,7 +30,7 @@ abstract class BaseFragment : Fragment() {
     protected fun showError(msg: String, onRetry: () -> Unit) {
         view?.let {
             snackBar = Snackbar.make(it, msg, Snackbar.LENGTH_LONG)
-            snackBar?.setAction("RETRY") {
+            snackBar?.setAction(getString(R.string.action_retry)) {
                 snackBar?.dismiss()
                 onRetry.invoke()
             }

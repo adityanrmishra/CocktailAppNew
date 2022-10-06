@@ -5,7 +5,7 @@ import com.app.cocktailapp.common.TestCoroutineRule
 import com.app.cocktailapp.data.MockResp
 import com.app.cocktailapp.data.errorMessage
 import com.app.cocktailapp.data.idDrink
-import com.app.cocktailapp.domain.repository.DrinkInfoRepositoryImp
+import com.app.cocktailapp.domain.repository.DrinkRepository
 import io.mockk.coEvery
 import io.mockk.mockk
 import io.mockk.unmockkAll
@@ -29,7 +29,7 @@ class DrinkInfoUseCaseImpTest {
     @get:Rule
     val testCoroutineRule = TestCoroutineRule()
 
-    private val drinkInfoRepositoryImp = mockk<DrinkInfoRepositoryImp>(relaxed = true)
+    private val drinkInfoRepositoryImp = mockk<DrinkRepository>()
     private lateinit var drinkInfoUseCaseImp: DrinkInfoUseCaseImp
 
     @Before
@@ -41,14 +41,18 @@ class DrinkInfoUseCaseImpTest {
     @Test
     fun `Given response when fetch drink detail from getDrinkById of DrinkInfoUseCaseImp expect response contains idDrink`() = runTest {
         coEvery { drinkInfoUseCaseImp.getDrinkById(idDrink) } returns MockResp.getDrinkInfoResourceData()
-        val data = MockResp.getDrinkInfoData().drinkResponseModels[0]
+
+        val data = MockResp.getDrinkInfoData().drinkResponseModels.first()
+
         Assert.assertEquals(data.idDrink, idDrink)
     }
 
     @Test
     fun `Given error when fetch drink detail from getDrinkById of DrinkInfoUseCaseImp expect null data`() = runTest {
         coEvery { drinkInfoUseCaseImp.getDrinkById(idDrink) } returns MockResp.getDrinkInfoFailureMock()
+
         val data = MockResp.getDrinkInfoFailureMock().first()
+
         Assert.assertEquals(errorMessage, data.message)
     }
 

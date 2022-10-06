@@ -15,8 +15,8 @@ class DrinkInfoMapper @Inject constructor() : Mapper<DrinkModel, DrinkResponseMo
             strInstructions = input.strInstructions,
             strDrinkThumb = input.strDrinkThumb,
             strIngredient1 = input.strIngredient1,
-            strMeasure1 = input.strMeasure1,
-            dateModified = input.dateModified
+            strMeasure1 = input.strMeasure1?:"",
+            dateModified = input.dateModified?:""
         )
     }
 }

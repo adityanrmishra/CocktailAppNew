@@ -2,7 +2,7 @@ package com.app.cocktailapp.ui.viewmodel
 
 import androidx.lifecycle.LiveData
 import com.app.cocktailapp.common.Resource
-import com.app.cocktailapp.observeForTesting
+import com.app.cocktailapp.common.observeForTesting
 import com.app.cocktailapp.ui.splash.SplashViewModel
 import io.mockk.unmockkAll
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -27,10 +27,9 @@ class SplashViewModelTest: BaseViewModelTest() {
 
     @Test
     fun `Given output When load returns Success`() = runBlocking {
-        //WHEN
+
         splashViewModel.load()
 
-        //THEN
         splashViewModel.isOk.observeForTesting {
             splashViewModel.isOk.value?.data?.let { assert(it) }
         }

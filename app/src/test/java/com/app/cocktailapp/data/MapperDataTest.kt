@@ -31,8 +31,10 @@ class MapperDataTest {
         var domainFilterData = listOf<FilterModel>()
         val mapper = FilterMapper()
         val data = MockResp.getFilterData()
+
         domainFilterData =
             if (data.drinks.isNotEmpty()) data.drinks.map { mapper.mapToOut(it) } else domainFilterData
+
         Assert.assertEquals(strCategory, domainFilterData[0].strCategory)
     }
     
@@ -41,6 +43,7 @@ class MapperDataTest {
         var domainDrinksData = listOf<DrinksModel>()
         val mapper = DrinksMapper()
         val data = MockResp.getDrinksListData()
+
         domainDrinksData =
             if (data.drinksResponseModel.isNotEmpty()) data.drinksResponseModel.map {
                 mapper.mapToOut(
@@ -56,6 +59,7 @@ class MapperDataTest {
         var domainDrinksData = listOf<DrinkModel>()
         val mapper = DrinkInfoMapper()
         val data = MockResp.getDrinkInfoData()
+
         domainDrinksData =
             if (data.drinkResponseModels.isNotEmpty()) data.drinkResponseModels.map {
                 mapper.mapToOut(

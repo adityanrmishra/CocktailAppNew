@@ -13,3 +13,4 @@ class DrinksMapperUI @Inject constructor() : Mapper<Drink, DrinksModel> {
         )
     }
 }
+

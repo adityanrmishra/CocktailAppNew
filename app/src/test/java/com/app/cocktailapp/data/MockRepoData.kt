@@ -29,10 +29,11 @@ object MockResp {
         var domainFilterData = listOf<FilterModel>()
         val mapper = FilterMapper()
         val data = getFilterData()
+
         domainFilterData =
             if (data.drinks.isNotEmpty()) data.drinks.map { mapper.mapToOut(it) } else domainFilterData
-        send(Resource.Success(data = domainFilterData))
 
+        send(Resource.Success(data = domainFilterData))
     }
 
     fun getFilterFailureMock(): Flow<Resource<List<FilterModel>>> = channelFlow {
@@ -69,12 +70,14 @@ object MockResp {
         var domainDrinksData = listOf<DrinksModel>()
         val mapper = DrinksMapper()
         val data = getDrinksListData()
+
         domainDrinksData =
             if (data.drinksResponseModel.isNotEmpty()) data.drinksResponseModel.map {
                 mapper.mapToOut(
                     it
                 )
             } else domainDrinksData
+
         send(Resource.Success(data = domainDrinksData))
 
     }
@@ -149,12 +152,14 @@ object MockResp {
         var domainDrinksData = listOf<DrinkModel>()
         val mapper = DrinkInfoMapper()
         val data = getDrinkInfoData()
+
         domainDrinksData =
             if (data.drinkResponseModels.isNotEmpty()) data.drinkResponseModels.map {
                 mapper.mapToOut(
                     it
                 )
             } else domainDrinksData
+
         send(Resource.Success(data = domainDrinksData))
     }
 
