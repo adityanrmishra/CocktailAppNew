@@ -40,7 +40,7 @@ class SplashFragment : BaseFragment() {
                 }
                 is Resource.Error -> {
                     binding.included.loading.makeInvisible()
-                    showMessage(R.string.unknown_error.toString())
+                    showMessage(R.string.nothing_found.toString())
                 }
             }
         }
