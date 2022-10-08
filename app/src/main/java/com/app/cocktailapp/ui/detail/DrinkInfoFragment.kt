@@ -68,7 +68,7 @@ class DrinkInfoFragment : BaseFragment() {
                         }
                         is UiState.ShowError -> {
                             binding.included.loading.makeInvisible()
-                            showMessage(it.error.message)
+                            showMessage(it.error.message.toString())
                         }
                     }
                 }

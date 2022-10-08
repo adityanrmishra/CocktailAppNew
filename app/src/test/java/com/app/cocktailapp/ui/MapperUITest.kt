@@ -6,9 +6,11 @@ import com.app.cocktailapp.data.idDrink
 import com.app.cocktailapp.data.strCategory
 import com.app.cocktailapp.ui.mapper.DrinkMapperUI
 import com.app.cocktailapp.ui.mapper.DrinksMapperUI
+import com.app.cocktailapp.ui.mapper.ErrorMapperUI
 import com.app.cocktailapp.ui.mapper.FilterMapperUI
 import com.app.cocktailapp.ui.model.Drink
 import com.app.cocktailapp.ui.model.DrinkInfo
+import com.app.cocktailapp.ui.model.Error
 import com.app.cocktailapp.ui.model.Filter
 import io.mockk.unmockkAll
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -21,7 +23,7 @@ import org.mockito.junit.MockitoJUnitRunner
 @ExperimentalCoroutinesApi
 @RunWith(MockitoJUnitRunner::class)
 class MapperUITest {
-    
+
     @get:Rule
     val testInstantTaskExecutorRule: TestRule = InstantTaskExecutorRule()
 
@@ -59,20 +61,32 @@ class MapperUITest {
     }
 
     @Test
-    fun `map  DrinkModel of domain to DrinkInfo of ui should return converted DrinkInfo`() = runTest {
-        var uiDrinkInfoData = listOf<DrinkInfo>()
-        val mapper = DrinkMapperUI()
-        val data = MockResp.getDrinkInfoDataUI()
-        
-        uiDrinkInfoData =
-            if (data.isNotEmpty()) data.map {
-                mapper.mapToOut(
-                    it
-                )
-            } else uiDrinkInfoData
+    fun `map  DrinkModel of domain to DrinkInfo of ui should return converted DrinkInfo`() =
+        runTest {
+            var uiDrinkInfoData = listOf<DrinkInfo>()
+            val mapper = DrinkMapperUI()
+            val data = MockResp.getDrinkInfoDataUI()
 
-        Assert.assertEquals(idDrink, uiDrinkInfoData[0].idDrink)
+            uiDrinkInfoData =
+                if (data.isNotEmpty()) data.map {
+                    mapper.mapToOut(
+                        it
+                    )
+                } else uiDrinkInfoData
+
+            Assert.assertEquals(idDrink, uiDrinkInfoData[0].idDrink)
+        }
+
+    @Test
+    fun `map String message of domain to Error of ui should return converted Error`() = runTest {
+        val error = Error("An Unknown error occurred")
+        val mapper = ErrorMapperUI()
+
+        val errorMappedData = mapper.mapToOut(error.message.toString())
+
+        Assert.assertEquals(error.message, errorMappedData.message)
     }
+
 
     @After
     fun tearDown() {

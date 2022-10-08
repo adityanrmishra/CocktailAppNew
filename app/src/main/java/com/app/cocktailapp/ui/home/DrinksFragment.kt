@@ -52,6 +52,7 @@ class DrinksFragment : BaseFragment() {
                         is UiState.InitialState -> {
                             drinksViewModel.fetchDrinkFilter()
                         }
+                        is UiState.ShowLoading -> {}
                         is UiState.ShowEmptyData -> {
                             showMessage(getString(R.string.nothing_found))
                         }
@@ -61,7 +62,7 @@ class DrinksFragment : BaseFragment() {
                             }
                         }
                         is UiState.ShowError -> {
-                            showMessage(it.error.message)
+                            showMessage(it.error.message.toString())
                         }
                     }
                 }
@@ -122,7 +123,7 @@ class DrinksFragment : BaseFragment() {
                         }
                         is UiState.ShowError -> {
                             binding.included.loading.makeInvisible()
-                            showMessage(it.error.message)
+                            showMessage(it.error.message.toString())
                         }
                     }
                 }

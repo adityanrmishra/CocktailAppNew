@@ -1,7 +1,6 @@
 package com.app.cocktailapp.data
 
-import com.app.cocktailapp.common.ErrorEntity
-import com.app.cocktailapp.common.Resource
+import com.app.cocktailapp.domain.model.Resource
 import com.app.cocktailapp.data.mappers.DrinkInfoMapper
 import com.app.cocktailapp.data.mappers.DrinksMapper
 import com.app.cocktailapp.data.mappers.FilterMapper
@@ -39,8 +38,7 @@ object MockResp {
     fun getFilterFailureMock(): Flow<Resource<List<FilterModel>>> = channelFlow {
         send(
             Resource.Error(
-                message = "An Unknown error occurred",
-                errorEntity = ErrorEntity.Network
+                message = "An Unknown error occurred"
             )
         )
     }
@@ -85,8 +83,7 @@ object MockResp {
     fun getDrinksFailureMock(): Flow<Resource<List<DrinksModel>>> = channelFlow {
         send(
             Resource.Error(
-                message = "An Unknown error occurred",
-                errorEntity = ErrorEntity.Network
+                message = "An Unknown error occurred"
             )
         )
     }
@@ -166,8 +163,7 @@ object MockResp {
     fun getDrinkInfoFailureMock(): Flow<Resource<List<DrinkModel>>> = channelFlow {
         send(
             Resource.Error(
-                message = "An Unknown error occurred",
-                errorEntity = ErrorEntity.Network
+                message = "An Unknown error occurred"
             )
         )
     }
@@ -215,5 +211,13 @@ object MockResp {
             dateModified = "2016-04-29 09:41:56"
         )
         return arrayListOf(drinkModel)
+    }
+
+    fun getErrorData(): Flow<Resource<String>> = channelFlow {
+        send(
+            Resource.Error(
+                message = "An Unknown error occurred"
+            )
+        )
     }
 }

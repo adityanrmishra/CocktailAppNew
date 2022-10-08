@@ -1,6 +1,6 @@
 package com.app.cocktailapp.domain.repository
 
-import com.app.cocktailapp.common.Resource
+import com.app.cocktailapp.domain.model.Resource
 import com.app.cocktailapp.domain.model.DrinkModel
 import com.app.cocktailapp.domain.model.DrinksModel
 import com.app.cocktailapp.domain.model.FilterModel

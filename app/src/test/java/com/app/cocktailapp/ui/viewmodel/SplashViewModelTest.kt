@@ -1,13 +1,14 @@
 package com.app.cocktailapp.ui.viewmodel
 
 import androidx.lifecycle.LiveData
-import com.app.cocktailapp.common.Resource
 import com.app.cocktailapp.common.observeForTesting
+import com.app.cocktailapp.ui.model.UiState
 import com.app.cocktailapp.ui.splash.SplashViewModel
 import io.mockk.unmockkAll
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import org.junit.After
+import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 
@@ -17,7 +18,7 @@ class SplashViewModelTest: BaseViewModelTest() {
     private lateinit var splashViewModel: SplashViewModel
 
 
-    private lateinit var isOk: LiveData<Resource<Boolean>>
+    private lateinit var isOk: LiveData<UiState<Boolean>>
 
     @Before
     fun setUp() {
@@ -31,7 +32,7 @@ class SplashViewModelTest: BaseViewModelTest() {
         splashViewModel.load()
 
         splashViewModel.isOk.observeForTesting {
-            splashViewModel.isOk.value?.data?.let { assert(it) }
+            Assert.assertNotNull(splashViewModel.isOk.value)
         }
     }
 

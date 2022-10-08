@@ -2,7 +2,7 @@ package com.app.cocktailapp.ui.home
 
 import androidx.lifecycle.viewModelScope
 import com.app.cocktailapp.ui.base.BaseViewModel
-import com.app.cocktailapp.common.Resource
+import com.app.cocktailapp.domain.model.Resource
 import com.app.cocktailapp.domain.usecase.DrinksUseCaseImp
 import com.app.cocktailapp.domain.usecase.FilterUseCaseImp
 import com.app.cocktailapp.ui.mapper.DrinksMapperUI
@@ -39,27 +39,26 @@ class DrinksViewModel @Inject constructor(
     val getDrinkUiState: StateFlow<UiState<List<Drink>>> = _getDrinkUiState
 
     fun fetchDrinkFilter() {
+        _getFilterUiState.value = UiState.ShowLoading()
         viewModelScope.launch {
             filterUseCaseImp.getFilters().collect {
                 when (it) {
-                    is Resource.Loading -> {
-                        _getFilterUiState.value = UiState.ShowLoading()
-                    }
                     is Resource.Success -> {
                         val filterList =
                             it.data?.map { filterData -> filterMapperUI.mapToOut(filterData) }
                                 ?: listOf()
-                        if (filterList.isNullOrEmpty()) {
+
+                        if (filterList.isEmpty()) {
                             _getFilterUiState.value = UiState.ShowEmptyData()
                         } else {
                             _getFilterUiState.value = UiState.ShowData(data = filterList)
                         }
                     }
                     is Resource.Error -> {
-                        val error = it.errorEntity
+                        val error = it.message
                         _getFilterUiState.value = UiState.ShowError(
                             errorViewMapper.mapToOut(
-                                error
+                                error.toString()
                             )
                         )
                     }
@@ -69,30 +68,27 @@ class DrinksViewModel @Inject constructor(
     }
 
     fun fetchDrinks(category: String) {
+        _getDrinkUiState.update { UiState.ShowLoading() }
         viewModelScope.launch {
             drinksUseCaseImp.fetchDrinksByCategory(category).collect {
                 when (it) {
-                    is Resource.Loading -> {
-                        _getDrinkUiState.update { UiState.ShowLoading() }
-                    }
                     is Resource.Success -> {
                         val drinkList =
                             it.data?.map { drinksData -> drinksMapperUI.mapToOut(drinksData) }
                                 ?: listOf()
 
-                        if (drinkList.isNullOrEmpty()) {
+                        if (drinkList.isEmpty()) {
                             _getDrinkUiState.update { UiState.ShowEmptyData() }
                         } else {
                             _getDrinkUiState.update { UiState.ShowData(data = drinkList) }
                         }
-
                     }
                     is Resource.Error -> {
-                        val error = it.errorEntity
+                        val error = it.message
                         _getDrinkUiState.update {
                             UiState.ShowError(
                                 errorViewMapper.mapToOut(
-                                    error
+                                    error.toString()
                                 )
                             )
                         }

@@ -120,8 +120,4 @@ dependencies {
     androidTestImplementation testing.uiTestRunner
     androidTestImplementation testing.uiTestRules
     implementation testing.uiTestExpressoIdling
-
-    androidTestImplementation "androidx.navigation:navigation-testing:2.5.1"
-    androidTestImplementation "androidx.fragment:fragment-testing:1.5.2"
-
 }
