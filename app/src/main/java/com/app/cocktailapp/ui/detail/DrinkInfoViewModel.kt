@@ -1,7 +1,7 @@
 package com.app.cocktailapp.ui.detail
 
 import androidx.lifecycle.viewModelScope
-import com.app.cocktailapp.common.Resource
+import com.app.cocktailapp.domain.model.Resource
 import com.app.cocktailapp.domain.usecase.DrinkInfoUseCaseImp
 import com.app.cocktailapp.ui.base.BaseViewModel
 import com.app.cocktailapp.ui.mapper.DrinkMapperUI
@@ -27,29 +27,27 @@ class DrinkInfoViewModel @Inject constructor(
     val getDrinkInfoUiState: StateFlow<UiState<DrinkInfo>> = _getDrinkInfoUiState
 
     fun fetchDrink(id: String) {
+        _getDrinkInfoUiState.update { (UiState.ShowLoading()) }
         viewModelScope.launch {
             drinkInfoUseCaseImp.getDrinkById(id).collect {
                 when (it) {
-                    is Resource.Loading -> {
-                        _getDrinkInfoUiState.update { (UiState.ShowLoading()) }// = UiState(isLoading = true)
-                    }
                     is Resource.Success -> {
                         val drinkInfo =
                             it.data?.map { drinkData -> drinkMapperUI.mapToOut(drinkData) }
                                 ?: listOf()
 
-                        if (drinkInfo.isNullOrEmpty()) {
+                        if (drinkInfo.isEmpty()) {
                             _getDrinkInfoUiState.update { UiState.ShowEmptyData() }
                         } else {
                             _getDrinkInfoUiState.update { UiState.ShowData(drinkInfo.first()) }
                         }
                     }
                     is Resource.Error -> {
-                        val error = it.errorEntity
+                        val error = it.message
                         _getDrinkInfoUiState.update {
                             UiState.ShowError(
                                 errorViewMapper.mapToOut(
-                                    error
+                                    error.toString()
                                 )
                             )
                         }

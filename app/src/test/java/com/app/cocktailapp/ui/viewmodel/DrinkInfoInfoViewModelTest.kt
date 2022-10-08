@@ -1,6 +1,5 @@
 package com.app.cocktailapp.ui.viewmodel
 
-import android.content.Context
 import com.app.cocktailapp.data.MockResp
 import com.app.cocktailapp.data.idDrink
 import com.app.cocktailapp.domain.usecase.DrinkInfoUseCaseImp

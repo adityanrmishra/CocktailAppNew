@@ -12,7 +12,7 @@ import javax.inject.Inject
 
 class DrinksAdapter @Inject constructor() : RecyclerView.Adapter<DrinksAdapter.DrinkHolder>() {
 
-    var list = mutableListOf<Drink>()
+    private val list = mutableListOf<Drink>()
     private var listener: ((Drink) -> Unit)? = null
 
     inner class DrinkHolder(private val binding: ItemDrinkBinding) :
