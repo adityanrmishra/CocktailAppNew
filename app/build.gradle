@@ -71,18 +71,11 @@ dependencies {
     implementation hilt.hiltViewModel
     kapt hilt.kaptHiltCompiler
 
-    //Network
-    implementation network.retrofit
+    //Network - Question
+    implementation network.retrofit // Question
     implementation network.retrofitGsonConverter
     implementation network.okhttp
     implementation network.okhttpLoggingInterceptor
-
-    //Room Database
-    implementation androidx.roomDb
-    kapt androidx.kaptRoomDb
-
-    // optional - Kotlin Extensions and Coroutines support for Room
-    implementation androidx.roomKtx
 
     //Glide
     implementation others.picasso
@@ -93,9 +86,6 @@ dependencies {
 
     //Activity extension, referring with  "by viewModels"
     implementation androidx.activityKtx
-
-    //Adding Swipe Refresh Layout Dependency
-    implementation androidx.swiperefreshlayout
 
     // LiveData
     implementation androidx.lifecycleLiveData
