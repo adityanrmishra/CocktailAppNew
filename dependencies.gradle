@@ -13,7 +13,6 @@ ext {
     def navigationFragmentKtx = "2.5.1"
     def navigationUiKtx = "2.5.1"
     def lifecycleExtensions = "2.2.0"
-    def swipeRefreshLayoutVersion = "1.1.0"
     def retrofitVersion = "2.9.0"
     def retrofitConverterGsonVersion = "2.9.0"
     def okhttpVersion = '5.0.0-alpha.10'
@@ -23,9 +22,6 @@ ext {
     def hiltLifecycleViewModelVersion = "1.0.0-alpha03"
     def kaptHiltCompilerVersion = "1.0.0"
     def kotlinxCoroutinesVersion = '1.6.4'
-    def roomVersion = '2.4.3'
-    def kaptRoomCompilerVersion = '2.4.3'
-    def roomKtxVersion = '2.4.3'
 
     def testCore = "2.1.0"
     def testKotlinxCoroutines = '1.6.4'
@@ -52,15 +48,11 @@ ext {
             appCompat         : "androidx.appcompat:appcompat:$appCompatVersion",
             constraintlayout  : "androidx.constraintlayout:constraintlayout:$constraintLayoutVersion",
             lifecycleExt      : "androidx.lifecycle:lifecycle-extensions:$lifecycleExtensions",
-            swiperefreshlayout: "androidx.swiperefreshlayout:swiperefreshlayout:$swipeRefreshLayoutVersion",
             lifecycleLiveData : "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleLivedataKtx",
             lifecycleViewModel: "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleViewModelKtx",
             navigationFragment: "androidx.navigation:navigation-fragment-ktx:$navigationFragmentKtx",
             navigationUi      : "androidx.navigation:navigation-ui-ktx:$navigationUiKtx",
-            activityKtx       : "androidx.activity:activity-ktx:$activityKtx",
-            roomDb            : "androidx.room:room-runtime:$roomVersion",
-            kaptRoomDb        : "androidx.room:room-compiler:$kaptRoomCompilerVersion",
-            roomKtx           : "androidx.room:room-ktx:$roomKtxVersion"
+            activityKtx       : "androidx.activity:activity-ktx:$activityKtx"
     ]
 
     google = [
