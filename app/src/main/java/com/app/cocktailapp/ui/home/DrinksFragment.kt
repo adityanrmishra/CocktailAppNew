@@ -20,8 +20,8 @@ import com.app.cocktailapp.ui.extension.makeVisible
 import com.app.cocktailapp.ui.model.Filter
 import com.app.cocktailapp.ui.model.UiState
 import com.google.android.material.chip.Chip
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 
 class DrinksFragment : BaseFragment() {
 

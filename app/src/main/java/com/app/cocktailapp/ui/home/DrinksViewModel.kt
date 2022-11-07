@@ -3,8 +3,8 @@ package com.app.cocktailapp.ui.home
 import androidx.lifecycle.viewModelScope
 import com.app.cocktailapp.ui.base.BaseViewModel
 import com.app.cocktailapp.domain.model.Resource
-import com.app.cocktailapp.domain.usecase.DrinksUseCaseImp
-import com.app.cocktailapp.domain.usecase.FilterUseCaseImp
+import com.app.cocktailapp.domain.usecase.DrinksUseCase
+import com.app.cocktailapp.domain.usecase.FilterUseCase
 import com.app.cocktailapp.ui.mapper.DrinksMapperUI
 import com.app.cocktailapp.ui.mapper.ErrorMapperUI
 import com.app.cocktailapp.ui.mapper.FilterMapperUI
@@ -20,9 +20,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DrinksViewModel @Inject constructor(
-    private val filterUseCaseImp: FilterUseCaseImp,
+    private val filterUseCase: FilterUseCase,
     private val filterMapperUI: FilterMapperUI,
-    private val drinksUseCaseImp: DrinksUseCaseImp,
+    private val drinksUseCase: DrinksUseCase,
     private val drinksMapperUI: DrinksMapperUI,
     private val errorViewMapper: ErrorMapperUI,
 ) :
@@ -40,8 +40,9 @@ class DrinksViewModel @Inject constructor(
 
     fun fetchDrinkFilter() {
         _getFilterUiState.value = UiState.ShowLoading()
+
         viewModelScope.launch {
-            filterUseCaseImp.getFilters().collect {
+            filterUseCase.getFilters().collect {
                 when (it) {
                     is Resource.Success -> {
                         val filterList =
@@ -70,7 +71,7 @@ class DrinksViewModel @Inject constructor(
     fun fetchDrinks(category: String) {
         _getDrinkUiState.update { UiState.ShowLoading() }
         viewModelScope.launch {
-            drinksUseCaseImp.fetchDrinksByCategory(category).collect {
+            drinksUseCase.fetchDrinksByCategory(category).collect {
                 when (it) {
                     is Resource.Success -> {
                         val drinkList =

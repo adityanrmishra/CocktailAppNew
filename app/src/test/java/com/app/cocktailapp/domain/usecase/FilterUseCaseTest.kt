@@ -15,7 +15,7 @@ import org.junit.*
 import org.junit.rules.TestRule
 
 @ExperimentalCoroutinesApi
-class FilterUseCaseImpTest {
+class FilterUseCaseTest {
 
     @get:Rule
     val testInstantTaskExecutorRule: TestRule = InstantTaskExecutorRule()
@@ -25,16 +25,16 @@ class FilterUseCaseImpTest {
 
     private val filterRepositoryImp = mockk<DrinkRepository>()
 
-    lateinit var filterUseCaseImp: FilterUseCaseImp
+    lateinit var filterUseCase: FilterUseCase
 
     @Before
     fun setUp() {
-        filterUseCaseImp = FilterUseCaseImp(filterRepositoryImp)
+        filterUseCase = FilterUseCase(filterRepositoryImp)
     }
 
     @Test
     fun `Given filters When getFilterData of FilterUseCaseImpl returns Success`() = runTest {
-        coEvery { filterUseCaseImp.getFilters() }.returns(MockResp.getFilterResourceData())
+        coEvery { filterUseCase.getFilters() }.returns(MockResp.getFilterResourceData())
 
         val data = MockResp.getFilterData().drinks
 
@@ -43,7 +43,7 @@ class FilterUseCaseImpTest {
 
     @Test
     fun `Given Filters When getFilterData FilterUseCaseImpl returns Error`() = runTest {
-        coEvery { filterUseCaseImp.getFilters() } returns MockResp.getFilterFailureMock()
+        coEvery { filterUseCase.getFilters() } returns MockResp.getFilterFailureMock()
 
         val data = MockResp.getFilterFailureMock().first()
 

@@ -2,7 +2,7 @@ package com.app.cocktailapp.ui.detail
 
 import androidx.lifecycle.viewModelScope
 import com.app.cocktailapp.domain.model.Resource
-import com.app.cocktailapp.domain.usecase.DrinkInfoUseCaseImp
+import com.app.cocktailapp.domain.usecase.DrinkInfoUseCase
 import com.app.cocktailapp.ui.base.BaseViewModel
 import com.app.cocktailapp.ui.mapper.DrinkMapperUI
 import com.app.cocktailapp.ui.mapper.ErrorMapperUI
@@ -17,7 +17,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DrinkInfoViewModel @Inject constructor(
-    private val drinkInfoUseCaseImp: DrinkInfoUseCaseImp,
+    private val drinkInfoUseCaseImp: DrinkInfoUseCase,
     private val drinkMapperUI: DrinkMapperUI,
     private val errorViewMapper: ErrorMapperUI,
 ) : BaseViewModel() {

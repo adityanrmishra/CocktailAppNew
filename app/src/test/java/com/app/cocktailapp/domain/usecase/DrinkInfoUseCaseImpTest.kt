@@ -30,11 +30,11 @@ class DrinkInfoUseCaseImpTest {
     val testCoroutineRule = TestCoroutineRule()
 
     private val drinkInfoRepositoryImp = mockk<DrinkRepository>()
-    private lateinit var drinkInfoUseCaseImp: DrinkInfoUseCaseImp
+    private lateinit var drinkInfoUseCaseImp: DrinkInfoUseCase
 
     @Before
     fun setUp() {
-        drinkInfoUseCaseImp = DrinkInfoUseCaseImp(drinkInfoRepositoryImp)
+        drinkInfoUseCaseImp = DrinkInfoUseCase(drinkInfoRepositoryImp)
     }
 
 

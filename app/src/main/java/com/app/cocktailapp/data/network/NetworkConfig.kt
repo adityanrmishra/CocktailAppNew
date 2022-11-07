@@ -18,4 +18,7 @@ object NetworkConfig {
         const val DRINKS_BY_ID = "/api/json/v1/1/lookup.php"
 
         const val UNKNOWN_ERROR = "An Unknown error occurred"
+
+        //https://www.thecocktaildb.com/api/json/v1/1/list.php?c=list
+        //https://www.thecocktaildb.com/api/json/v1/1/filter.php?c=""
 }

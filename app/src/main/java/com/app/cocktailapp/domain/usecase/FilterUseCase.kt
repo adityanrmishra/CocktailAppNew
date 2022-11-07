@@ -6,7 +6,7 @@ import com.app.cocktailapp.domain.repository.DrinkRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class FilterUseCaseImp @Inject constructor(private val drinkRepository: DrinkRepository) {
+class FilterUseCase @Inject constructor(private val drinkRepository: DrinkRepository) {
     fun getFilters(): Flow<Resource<List<FilterModel>>> {
         return drinkRepository.getFilters()
     }

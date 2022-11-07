@@ -3,8 +3,8 @@ package com.app.cocktailapp.ui.viewmodel
 import android.content.Context
 import com.app.cocktailapp.data.MockResp
 import com.app.cocktailapp.data.strCategory
-import com.app.cocktailapp.domain.usecase.DrinksUseCaseImp
-import com.app.cocktailapp.domain.usecase.FilterUseCaseImp
+import com.app.cocktailapp.domain.usecase.DrinksUseCase
+import com.app.cocktailapp.domain.usecase.FilterUseCase
 import com.app.cocktailapp.ui.home.DrinksViewModel
 import com.app.cocktailapp.ui.mapper.DrinksMapperUI
 import com.app.cocktailapp.ui.mapper.ErrorMapperUI
@@ -22,10 +22,10 @@ import org.junit.Test
 @ExperimentalCoroutinesApi
 class DrinkViewModelTest: BaseViewModelTest() {
 
-    private val getDrinkFilterUseCase = mockk<FilterUseCaseImp>()
+    private val getDrinkFilterUseCase = mockk<FilterUseCase>()
     private val filterMapperUI = FilterMapperUI()
 
-    private val getDrinksUseCase = mockk<DrinksUseCaseImp>()
+    private val getDrinksUseCase = mockk<DrinksUseCase>()
     private val drinkMapperUI = DrinksMapperUI()
 
     private val errorMapperUI = ErrorMapperUI()

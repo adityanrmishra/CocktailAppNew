@@ -22,7 +22,7 @@ import org.mockito.junit.MockitoJUnitRunner
 @ExperimentalCoroutinesApi
 @InternalCoroutinesApi
 @RunWith(MockitoJUnitRunner::class)
-class DrinksUseCaseImpTest {
+class DrinksUseCaseTest {
 
     @get:Rule
     val testInstantTaskExecutorRule: TestRule = InstantTaskExecutorRule()
@@ -31,16 +31,16 @@ class DrinksUseCaseImpTest {
     val testCoroutineRule = TestCoroutineRule()
 
     private val drinksRepositoryImp = mockk<DrinkRepository>()
-    lateinit var drinksUseCaseImp: DrinksUseCaseImp
+    lateinit var drinksUseCase: DrinksUseCase
 
     @Before
     fun setUp() {
-        drinksUseCaseImp = DrinksUseCaseImp(drinksRepositoryImp)
+        drinksUseCase = DrinksUseCase(drinksRepositoryImp)
     }
 
     @Test
     fun `Given response data when fetch fetchDrinksByCategory from DrinksUseCaseImp expect result has data`() = runTest {
-        coEvery { drinksUseCaseImp.fetchDrinksByCategory(strCategory) } returns MockResp.getDrinksResourceData()
+        coEvery { drinksUseCase.fetchDrinksByCategory(strCategory) } returns MockResp.getDrinksResourceData()
 
         val data = MockResp.getDrinksListData()
 
@@ -49,7 +49,7 @@ class DrinksUseCaseImpTest {
 
     @Test
     fun `Given http error when fetch fetch fetchDrinksByCategory from DrinksUseCaseImp expect null data`() = runTest {
-        coEvery { drinksUseCaseImp.fetchDrinksByCategory(strCategory) } returns MockResp.getDrinksFailureMock()
+        coEvery { drinksUseCase.fetchDrinksByCategory(strCategory) } returns MockResp.getDrinksFailureMock()
 
         val data = MockResp.getDrinksFailureMock().first()
 
